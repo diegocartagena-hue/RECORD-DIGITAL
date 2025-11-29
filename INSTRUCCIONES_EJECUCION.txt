@@ -1,0 +1,78 @@
+═══════════════════════════════════════════════════════════
+  INSTRUCCIONES PARA EJECUTAR EL SERVIDOR
+═══════════════════════════════════════════════════════════
+
+PASO 1: Verificar que Python esté instalado
+─────────────────────────────────────────────
+Abre PowerShell o CMD y ejecuta:
+  python --version
+
+Si no funciona, instala Python desde python.org
+
+
+PASO 2: Instalar dependencias (solo la primera vez)
+────────────────────────────────────────────────────
+En PowerShell o CMD, en la carpeta del proyecto, ejecuta:
+  pip install -r requirements.txt
+
+Si hay errores, prueba:
+  python -m pip install -r requirements.txt
+
+
+PASO 3: Ejecutar el servidor
+─────────────────────────────
+OPCIÓN A - Usando el archivo batch:
+  Haz doble clic en: EJECUTAR.bat
+
+OPCIÓN B - Desde la terminal:
+  python start_server.py
+
+OPCIÓN C - Directamente:
+  python app.py
+
+
+PASO 4: Verificar que funciona
+───────────────────────────────
+1. Deberías ver mensajes en la terminal indicando que el servidor inició
+2. Abre tu navegador
+3. Ve a: http://localhost:5000
+4. Deberías ver la página de login
+
+
+SI NO FUNCIONA - Prueba esto:
+──────────────────────────────
+1. Ejecuta primero el diagnóstico:
+   python diagnostico.py
+
+2. Prueba el servidor simple:
+   python test_simple.py
+   O haz doble clic en: PRUEBA_SIMPLE.bat
+
+3. Si el servidor simple funciona pero el completo no, hay un problema
+   con Flask-SocketIO o alguna dependencia específica
+
+
+ERRORES COMUNES:
+────────────────
+- "Module not found": Ejecuta pip install -r requirements.txt
+- "Port 5000 already in use": Cierra otros programas que usen ese puerto
+- "Permission denied": Ejecuta como administrador
+- No aparece nada: Verifica que Python esté en el PATH del sistema
+
+
+CREDENCIALES DE PRUEBA:
+────────────────────────
+Administrador:
+  Email: admin@interamericana.edu
+  Contraseña: admin123
+
+Coordinador:
+  Email: coord@interamericana.edu
+  Contraseña: coord123
+
+Maestro:
+  Email: maestro@interamericana.edu
+  Contraseña: maestro123
+
+═══════════════════════════════════════════════════════════
+

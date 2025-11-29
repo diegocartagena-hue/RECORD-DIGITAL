@@ -1,0 +1,44 @@
+============================================================
+  INSTRUCCIONES FINALES
+============================================================
+
+PASO 1: LIMPIAR E INSTALAR
+---------------------------
+Ejecuta: LIMPIAR_E_INSTALAR.bat
+
+Esto eliminara node_modules y reinstalara todo desde cero.
+Espera a que termine (puede tardar varios minutos).
+
+PASO 2: INICIAR SERVIDOR
+-------------------------
+Despues de que termine la instalacion, ejecuta:
+- INICIAR_SIMPLE.bat
+- O desde terminal: npm start
+
+PASO 3: ACCEDER
+---------------
+Abre tu navegador en:
+http://localhost:5000
+
+Login:
+Email: admin@interamericana.edu
+Password: admin123
+
+============================================================
+  SI SIGUE SIN FUNCIONAR
+============================================================
+
+Ejecuta estos comandos manualmente en CMD:
+
+1. cd C:\Users\User\Videos\RECORD-DIGITAL
+
+2. rmdir /s /q node_modules
+
+3. npm install
+
+4. npm start
+
+Si npm install muestra errores, comparte el mensaje exacto.
+
+============================================================
+

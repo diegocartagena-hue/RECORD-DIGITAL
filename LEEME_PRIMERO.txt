@@ -1,0 +1,59 @@
+═══════════════════════════════════════════════════════════
+  SISTEMA DE REGISTRO DIGITAL
+  Escuela Interamericana
+═══════════════════════════════════════════════════════════
+
+✅ PROYECTO REESTRUCTURADO CON NODE.JS (JavaScript)
+
+Ya no necesitas Python, ahora todo funciona con Node.js
+
+═══════════════════════════════════════════════════════════
+  INSTALACIÓN RÁPIDA
+═══════════════════════════════════════════════════════════
+
+1. INSTALAR NODE.JS
+   ─────────────────
+   - Ve a: https://nodejs.org/
+   - Descarga Node.js 18.x o superior
+   - ⚠️ IMPORTANTE: Marca "Add to PATH" durante la instalación
+   - Instala normalmente
+
+2. EJECUTAR EL SISTEMA
+   ────────────────────
+   - Haz doble clic en: INICIAR.bat
+   - O desde terminal: npm install (primera vez) y luego npm start
+
+3. ACCEDER AL SISTEMA
+   ───────────────────
+   - Abre tu navegador
+   - Ve a: http://localhost:5000
+
+═══════════════════════════════════════════════════════════
+  CREDENCIALES DE PRUEBA
+═══════════════════════════════════════════════════════════
+
+Administrador:
+  Email: admin@interamericana.edu
+  Contraseña: admin123
+
+Coordinador:
+  Email: coord@interamericana.edu
+  Contraseña: coord123
+
+Maestro:
+  Email: maestro@interamericana.edu
+  Contraseña: maestro123
+
+═══════════════════════════════════════════════════════════
+  VENTAJAS DE NODE.JS
+═══════════════════════════════════════════════════════════
+
+✓ Más fácil de instalar (solo Node.js)
+✓ No necesita compilación
+✓ Mismo lenguaje (JavaScript) en frontend y backend
+✓ Mejor rendimiento
+✓ Instalación más rápida de dependencias
+
+═══════════════════════════════════════════════════════════
+
+Para más información, lee: README.md

@@ -1,0 +1,60 @@
+═══════════════════════════════════════════════════════════
+  RESUMEN DE INSTALACIÓN Y EJECUCIÓN
+═══════════════════════════════════════════════════════════
+
+PASOS EJECUTADOS:
+─────────────────
+✓ 1. Verificación de Python
+✓ 2. Instalación de dependencias (pip install -r requirements.txt)
+✓ 3. Inicialización de base de datos
+✓ 4. Inicio del servidor
+
+═══════════════════════════════════════════════════════════
+  CÓMO ACCEDER AL SISTEMA
+═══════════════════════════════════════════════════════════
+
+1. El servidor debería estar corriendo ahora
+2. Abre tu navegador
+3. Ve a: http://localhost:5000
+4. O también: http://127.0.0.1:5000
+
+═══════════════════════════════════════════════════════════
+  CREDENCIALES DE PRUEBA
+═══════════════════════════════════════════════════════════
+
+ADMINISTRADOR (acceso completo):
+  Email: admin@interamericana.edu
+  Contraseña: admin123
+
+COORDINADOR:
+  Email: coord@interamericana.edu
+  Contraseña: coord123
+
+MAESTRO:
+  Email: maestro@interamericana.edu
+  Contraseña: maestro123
+
+═══════════════════════════════════════════════════════════
+  PARA INICIAR EL SERVIDOR EN EL FUTURO
+═══════════════════════════════════════════════════════════
+
+Opción 1 - Archivo batch (más fácil):
+  Haz doble clic en: INICIAR_SERVIDOR.bat
+
+Opción 2 - Desde terminal:
+  python start_server.py
+
+Opción 3 - Directamente:
+  python app.py
+
+═══════════════════════════════════════════════════════════
+  VERIFICAR SI EL SERVIDOR ESTÁ CORRIENDO
+═══════════════════════════════════════════════════════════
+
+Ejecuta: python verificar_servidor.py
+
+O simplemente intenta acceder a http://localhost:5000
+en tu navegador.
+
+═══════════════════════════════════════════════════════════
+

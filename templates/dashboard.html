@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Sistema de Registro Digital</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+</head>
+<body>
+    <!-- Menú de Navegación Responsive -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>Escuela Interamericana</h2>
+            </div>
+            <button class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#" data-page="dashboard" class="nav-link active">Dashboard</a></li>
+                <li id="annotationsNav" style="display:none;"><a href="#" data-page="annotations" class="nav-link">Anotaciones</a></li>
+                <li id="studentsNav" style="display:none;"><a href="#" data-page="students" class="nav-link">Estudiantes</a></li>
+                <li id="teachersNav" style="display:none;"><a href="#" data-page="teachers" class="nav-link">Maestros</a></li>
+                <li id="coordinatorsNav" style="display:none;"><a href="#" data-page="coordinators" class="nav-link">Coordinadores</a></li>
+                <li id="gradesNav" style="display:none;"><a href="#" data-page="grades" class="nav-link">Grados</a></li>
+                <li id="emergencyNav" style="display:none;"><a href="#" data-page="emergency" class="nav-link">Emergencias</a></li>
+                <li id="adminNav" style="display:none;"><a href="#" data-page="admin" class="nav-link">Administración</a></li>
+                <li><a href="#" data-page="profile" class="nav-link" id="profileNav">Mi Perfil</a></li>
+                <li><a href="#" id="logoutBtn" class="nav-link">Cerrar Sesión</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Botón de Emergencia (Solo para Maestros) -->
+    <div id="emergencyButton" class="emergency-button" style="display:none;">
+        <button class="btn-emergency" id="btnEmergency">
+            🚨 Solicitar Asistencia
+        </button>
+    </div>
+
+    <!-- Notificaciones -->
+    <div id="notifications" class="notifications"></div>
+
+    <!-- Contenido Principal -->
+    <main class="main-content">
+        <!-- Dashboard -->
+        <div id="dashboardPage" class="page active">
+            <h1>Dashboard</h1>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Anotaciones</h3>
+                    <p id="totalAnnotations">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Estudiantes con Anotaciones</h3>
+                    <p id="studentsWithAnnotations">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Emergencias Pendientes</h3>
+                    <p id="pendingEmergencies">0</p>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="topStudentsChart"></canvas>
+            </div>
+            <div class="filters">
+                <select id="gradeFilter" class="form-control">
+                    <option value="">Todos los grados</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Página de Anotaciones -->
+        <div id="annotationsPage" class="page">
+            <h1>Crear Anotación</h1>
+            <form id="annotationForm" class="form-card">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Grado</label>
+                        <select id="annotationGrade" class="form-control" required>
+                            <option value="">Seleccionar grado</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Estudiante</label>
+                        <select id="annotationStudent" class="form-control" required>
+                            <option value="">Seleccionar estudiante</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Tipo de Falta</label>
+                        <select id="annotationType" class="form-control" required>
+                            <option value="">Seleccionar tipo</option>
+                            <option value="leve">Leve (5 puntos)</option>
+                            <option value="grave">Grave (10 puntos)</option>
+                            <option value="muy_grave">Muy Grave (20 puntos)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Puntos</label>
+                        <input type="number" id="annotationPoints" class="form-control" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Descripción</label>
+                    <textarea id="annotationDescription" class="form-control" rows="4"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Registrar Anotación</button>
+            </form>
+        </div>
+
+        <!-- Página de Estudiantes -->
+        <div id="studentsPage" class="page">
+            <h1>Estudiantes</h1>
+            <div class="filters">
+                <select id="studentGradeFilter" class="form-control">
+                    <option value="">Seleccionar grado</option>
+                </select>
+            </div>
+            <div id="studentsList" class="students-list"></div>
+        </div>
+
+        <!-- Página de Maestros (Coordinador/Admin) -->
+        <div id="teachersPage" class="page">
+            <h1>Gestión de Maestros</h1>
+            <button class="btn btn-primary" id="btnAddTeacher">Agregar Maestro</button>
+            <div id="teachersList" class="teachers-list"></div>
+        </div>
+
+        <!-- Página de Coordinadores (Admin) -->
+        <div id="coordinatorsPage" class="page">
+            <h1>Gestión de Coordinadores</h1>
+            <button class="btn btn-primary" id="btnAddCoordinator">Agregar Coordinador</button>
+            <div id="coordinatorsList" class="coordinators-list"></div>
+        </div>
+
+        <!-- Página de Grados (Admin) -->
+        <div id="gradesPage" class="page">
+            <h1>Gestión de Grados</h1>
+            <button class="btn btn-primary" id="btnAddGrade">Agregar Grado</button>
+            <div id="gradesList" class="grades-list"></div>
+        </div>
+
+        <!-- Página de Emergencias (Coordinador) -->
+        <div id="emergencyPage" class="page">
+            <h1>Solicitudes de Emergencia</h1>
+            <div id="emergencyRequests" class="emergency-requests"></div>
+        </div>
+
+        <!-- Página de Administración (Admin) -->
+        <div id="adminPage" class="page">
+            <h1>Administración del Sistema</h1>
+            <div class="admin-actions">
+                <div class="admin-section">
+                    <h2>Gestión de Estudiantes</h2>
+                    <button class="btn btn-primary" id="btnAddStudent">Agregar Estudiante Manualmente</button>
+                    <div class="form-group" style="margin-top: 20px;">
+                        <label>Importar Estudiantes (Excel o CSV)</label>
+                        <input type="file" id="importFile" accept=".xlsx,.xls,.csv" class="form-control">
+                        <select id="importGrade" class="form-control" style="margin-top: 10px;">
+                            <option value="">Seleccionar grado</option>
+                        </select>
+                        <button class="btn btn-primary" id="btnImport" style="margin-top: 10px;">Importar</button>
+                        <small style="display: block; margin-top: 5px; color: #666;">
+                            El archivo debe contener columnas: student_id (o id), full_name (o nombre)
+                        </small>
+                    </div>
+                </div>
+                <div class="admin-section" style="margin-top: 30px;">
+                    <h2>Base de Datos</h2>
+                    <button class="btn btn-primary" id="btnExportDB">Exportar Base de Datos</button>
+                    <button class="btn btn-danger" id="btnNewYear" style="margin-left: 10px;">Crear Nuevo Año</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Página de Perfil -->
+        <div id="profilePage" class="page">
+            <h1>Mi Perfil</h1>
+            <div id="profileInfo" class="profile-card" style="max-width: 600px; margin: 20px auto; padding: 20px; background: #fff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <div class="profile-field">
+                    <strong>ID:</strong> <span id="profileId">-</span>
+                </div>
+                <div class="profile-field">
+                    <strong>Nombre Completo:</strong> <span id="profileFullName">-</span>
+                </div>
+                <div class="profile-field">
+                    <strong>Usuario:</strong> <span id="profileUsername">-</span>
+                </div>
+                <div class="profile-field">
+                    <strong>Correo Electrónico:</strong> <span id="profileEmail">-</span>
+                </div>
+                <div class="profile-field">
+                    <strong>Rol:</strong> <span id="profileRole">-</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modales -->
+    <div id="modalOverlay" class="modal-overlay">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script src="/js/main.js"></script>
+    <script src="/js/dashboard.js"></script>
+    <script src="/js/charts.js"></script>
+</body>
+</html>
+
+
