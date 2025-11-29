@@ -772,7 +772,8 @@ async function handleImportStudents() {
     }
 }
 
-function showAddStudentModal() {
+// Hacer la función disponible globalmente
+window.showAddStudentModal = function() {
     // Obtener grados para el select
     fetch('/api/grades')
         .then(response => response.json())
@@ -806,38 +807,57 @@ function showAddStudentModal() {
             showModal(html);
             
             const form = document.getElementById('addStudentForm');
-            form.addEventListener('submit', async (e) => {
-                e.preventDefault();
+            if (form) {
+                // Remover listeners anteriores si existen
+                const newForm = form.cloneNode(true);
+                form.parentNode.replaceChild(newForm, form);
                 
-                const data = {
-                    student_id: document.getElementById('studentId').value.trim(),
-                    full_name: document.getElementById('studentFullName').value.trim(),
-                    grade_id: parseInt(document.getElementById('studentGrade').value)
-                };
-                
-                try {
-                    const response = await fetch('/api/students', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(data)
-                    });
+                newForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
                     
-                    const result = await response.json();
+                    const data = {
+                        student_id: document.getElementById('studentId').value.trim(),
+                        full_name: document.getElementById('studentFullName').value.trim(),
+                        grade_id: parseInt(document.getElementById('studentGrade').value)
+                    };
                     
-                    if (result.success) {
-                        showNotification('Estudiante agregado exitosamente', 'success');
-                        closeModal();
-                    } else {
-                        showNotification(result.error || 'Error al agregar estudiante', 'error');
+                    // Validación
+                    if (!data.student_id || !data.full_name || !data.grade_id) {
+                        showNotification('Por favor complete todos los campos', 'error');
+                        return;
                     }
-                } catch (error) {
-                    showNotification('Error de conexión', 'error');
-                }
-            });
+                    
+                    try {
+                        const response = await fetch('/api/students', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(data)
+                        });
+                        
+                        const result = await response.json();
+                        
+                        if (result.success) {
+                            showNotification('Estudiante agregado exitosamente', 'success');
+                            closeModal();
+                            // Recargar lista de estudiantes si estamos en esa página
+                            const studentGradeFilter = document.getElementById('studentGradeFilter');
+                            if (studentGradeFilter && studentGradeFilter.value) {
+                                loadStudentsList(studentGradeFilter.value);
+                            }
+                        } else {
+                            showNotification(result.error || 'Error al agregar estudiante', 'error');
+                        }
+                    } catch (error) {
+                        console.error('Error agregando estudiante:', error);
+                        showNotification('Error de conexión. Verifique su conexión a internet.', 'error');
+                    }
+                });
+            }
         })
         .catch(error => {
+            console.error('Error cargando grados:', error);
             showNotification('Error al cargar grados', 'error');
         });
 }

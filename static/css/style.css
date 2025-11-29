@@ -526,6 +526,18 @@ textarea.form-control {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
+.admin-section {
+    margin-bottom: 30px;
+    padding: 20px;
+    background: var(--gray-light);
+    border-radius: 8px;
+}
+
+.admin-section h2 {
+    margin-bottom: 15px;
+    color: var(--primary-dark);
+}
+
 .admin-actions .btn {
     margin-bottom: 20px;
     margin-right: 10px;

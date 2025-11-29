@@ -549,9 +549,7 @@ async function handleImportStudents() {
     // Implementar en dashboard.js
 }
 
-function showAddStudentModal() {
-    // Implementar en dashboard.js
-}
+// showAddStudentModal está implementada en dashboard.js
 
 function loadProfilePage() {
     if (currentUser) {
