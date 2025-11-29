@@ -385,6 +385,10 @@ async function loadCoordinatorsPage() {
 }
 
 async function loadGradesPage() {
+    // Asegurarse de que currentUser esté cargado
+    if (!currentUser) {
+        await loadUserData();
+    }
     await loadGradesList();
     const btnAdd = document.getElementById('btnAddGrade');
     if (btnAdd) {

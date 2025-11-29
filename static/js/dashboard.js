@@ -475,17 +475,70 @@ async function loadGradesList() {
         
         container.innerHTML = '';
         
-        grades.forEach(grade => {
-            const card = document.createElement('div');
-            card.className = 'grade-card';
-            card.innerHTML = `
-                <div class="card-info">
-                    <h3>${grade.grade_number}° ${grade.section}</h3>
-                    <p>Año: ${grade.year}</p>
-                </div>
-            `;
-            container.appendChild(card);
-        });
+        // Verificar si el usuario es administrador
+        const isAdmin = currentUser && currentUser.role === 'admin';
+        
+        // Obtener conteo de estudiantes por grado
+        for (const grade of grades) {
+            try {
+                const studentsResponse = await fetch(`/api/students/${grade.id}`);
+                const students = await studentsResponse.json();
+                const studentCount = students ? students.length : 0;
+                
+                const card = document.createElement('div');
+                card.className = 'grade-card';
+                
+                let actionsHTML = '';
+                if (isAdmin) {
+                    actionsHTML = `
+                        <div class="card-actions">
+                            <button class="btn btn-primary btn-sm" onclick="showAddStudentToGradeModal(${grade.id}, '${grade.grade_number}° ${grade.section}')">
+                                ➕ Agregar Estudiante
+                            </button>
+                            <button class="btn btn-success btn-sm" onclick="showImportStudentsToGradeModal(${grade.id}, '${grade.grade_number}° ${grade.section}')">
+                                📥 Importar Lista
+                            </button>
+                        </div>
+                    `;
+                }
+                
+                card.innerHTML = `
+                    <div class="card-info">
+                        <h3>${grade.grade_number}° ${grade.section}</h3>
+                        <p>Año: ${grade.year}</p>
+                        <p style="margin-top: 5px;"><strong>Estudiantes:</strong> ${studentCount}</p>
+                    </div>
+                    ${actionsHTML}
+                `;
+                container.appendChild(card);
+            } catch (error) {
+                console.error(`Error cargando estudiantes para grado ${grade.id}:`, error);
+                // Crear tarjeta sin conteo si hay error
+                const card = document.createElement('div');
+                card.className = 'grade-card';
+                let actionsHTML = '';
+                if (isAdmin) {
+                    actionsHTML = `
+                        <div class="card-actions">
+                            <button class="btn btn-primary btn-sm" onclick="showAddStudentToGradeModal(${grade.id}, '${grade.grade_number}° ${grade.section}')">
+                                ➕ Agregar Estudiante
+                            </button>
+                            <button class="btn btn-success btn-sm" onclick="showImportStudentsToGradeModal(${grade.id}, '${grade.grade_number}° ${grade.section}')">
+                                📥 Importar Lista
+                            </button>
+                        </div>
+                    `;
+                }
+                card.innerHTML = `
+                    <div class="card-info">
+                        <h3>${grade.grade_number}° ${grade.section}</h3>
+                        <p>Año: ${grade.year}</p>
+                    </div>
+                    ${actionsHTML}
+                `;
+                container.appendChild(card);
+            }
+        }
     } catch (error) {
         console.error('Error cargando grados:', error);
     }
@@ -769,6 +822,134 @@ async function handleImportStudents() {
         }
     } catch (error) {
         showNotification('Error de conexión', 'error');
+    }
+}
+
+// Función para agregar estudiante a un grado específico
+window.showAddStudentToGradeModal = function(gradeId, gradeName) {
+    const html = `
+        <h2>Agregar Estudiante a ${gradeName}</h2>
+        <form id="addStudentToGradeForm">
+            <div class="form-group">
+                <label>ID de Estudiante</label>
+                <input type="text" id="studentIdToGrade" class="form-control" required placeholder="Ej: 2024001">
+            </div>
+            <div class="form-group">
+                <label>Nombre Completo</label>
+                <input type="text" id="studentFullNameToGrade" class="form-control" required placeholder="Ej: Juan Pérez">
+            </div>
+            <button type="submit" class="btn btn-primary">Agregar Estudiante</button>
+        </form>
+    `;
+    
+    showModal(html);
+    
+    const form = document.getElementById('addStudentToGradeForm');
+    if (form) {
+        const newForm = form.cloneNode(true);
+        form.parentNode.replaceChild(newForm, form);
+        
+        newForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const data = {
+                student_id: document.getElementById('studentIdToGrade').value.trim(),
+                full_name: document.getElementById('studentFullNameToGrade').value.trim(),
+                grade_id: gradeId
+            };
+            
+            if (!data.student_id || !data.full_name) {
+                showNotification('Por favor complete todos los campos', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/students', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showNotification('Estudiante agregado exitosamente', 'success');
+                    closeModal();
+                    loadGradesList(); // Recargar lista de grados para actualizar conteo
+                } else {
+                    showNotification(result.error || 'Error al agregar estudiante', 'error');
+                }
+            } catch (error) {
+                console.error('Error agregando estudiante:', error);
+                showNotification('Error de conexión', 'error');
+            }
+        });
+    }
+}
+
+// Función para importar estudiantes a un grado específico
+window.showImportStudentsToGradeModal = function(gradeId, gradeName) {
+    const html = `
+        <h2>Importar Estudiantes a ${gradeName}</h2>
+        <form id="importStudentsToGradeForm">
+            <div class="form-group">
+                <label>Seleccionar archivo (Excel o CSV)</label>
+                <input type="file" id="importFileToGrade" accept=".xlsx,.xls,.csv" class="form-control" required>
+                <small style="display: block; margin-top: 5px; color: #666;">
+                    El archivo debe contener columnas: student_id (o id), full_name (o nombre)
+                </small>
+            </div>
+            <button type="submit" class="btn btn-primary">Importar Estudiantes</button>
+        </form>
+    `;
+    
+    showModal(html);
+    
+    const form = document.getElementById('importStudentsToGradeForm');
+    if (form) {
+        const newForm = form.cloneNode(true);
+        form.parentNode.replaceChild(newForm, form);
+        
+        newForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const fileInput = document.getElementById('importFileToGrade');
+            if (!fileInput.files.length) {
+                showNotification('Seleccione un archivo', 'error');
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+            formData.append('grade_id', gradeId);
+            
+            try {
+                const response = await fetch('/api/students/import', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    let message = `${result.imported} estudiantes importados exitosamente a ${gradeName}`;
+                    if (result.errors && result.errors.length > 0) {
+                        message += `. ${result.errors.length} errores encontrados.`;
+                        console.warn('Errores de importación:', result.errors);
+                    }
+                    showNotification(message, 'success');
+                    closeModal();
+                    loadGradesList(); // Recargar lista de grados para actualizar conteo
+                } else {
+                    showNotification(result.error || 'Error al importar estudiantes', 'error');
+                }
+            } catch (error) {
+                console.error('Error importando estudiantes:', error);
+                showNotification('Error de conexión', 'error');
+            }
+        });
     }
 }
 

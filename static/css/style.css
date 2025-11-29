@@ -381,6 +381,12 @@ textarea.form-control {
 .card-actions {
     display: flex;
     gap: 10px;
+    flex-wrap: wrap;
+}
+
+.btn-sm {
+    padding: 8px 16px;
+    font-size: 14px;
 }
 
 /* ==================== SOLICITUDES DE EMERGENCIA ==================== */
