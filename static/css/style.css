@@ -378,6 +378,43 @@ textarea.form-control {
     font-size: 14px;
 }
 
+.conduct-indicator {
+    margin-top: 10px;
+    padding: 10px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    border-left: 3px solid var(--primary-dark);
+}
+
+.conduct-bar-container {
+    width: 100%;
+}
+
+.conduct-bar-label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.conduct-status {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.conduct-bar {
+    position: relative;
+}
+
+.conduct-bar-fill {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+}
+
 .card-actions {
     display: flex;
     gap: 10px;

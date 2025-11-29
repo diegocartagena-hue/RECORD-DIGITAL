@@ -141,7 +141,23 @@ async function loadStudentsList(gradeId) {
             const annotationsResponse = await fetch(`/api/students/${student.id}/annotations`);
             const annotations = await annotationsResponse.json();
             
-            const totalPoints = annotations.reduce((sum, a) => sum + (a.points || 0), 0);
+            const totalPointsDeducted = annotations.reduce((sum, a) => sum + (a.points || 0), 0);
+            const initialConductPoints = 10;
+            const currentConductPoints = Math.max(0, initialConductPoints - totalPointsDeducted);
+            
+            // Determinar color del indicador según puntos de conducta
+            let conductColor = '#4caf50'; // Verde
+            let conductStatus = 'Excelente';
+            if (currentConductPoints <= 3) {
+                conductColor = '#d32f2f'; // Rojo
+                conductStatus = 'Crítico';
+            } else if (currentConductPoints <= 5) {
+                conductColor = '#ff9800'; // Naranja
+                conductStatus = 'Bajo';
+            } else if (currentConductPoints <= 7) {
+                conductColor = '#ffc107'; // Amarillo
+                conductStatus = 'Regular';
+            }
             
             const card = document.createElement('div');
             card.className = 'student-card';
@@ -149,7 +165,23 @@ async function loadStudentsList(gradeId) {
                 <div class="card-info">
                     <h3>${student.full_name}</h3>
                     <p>ID: ${student.student_id}</p>
-                    <p>Anotaciones: ${annotations.length} | Puntos: ${totalPoints}</p>
+                    <p>Anotaciones: ${annotations.length} | Puntos descontados: ${totalPointsDeducted}</p>
+                    <div class="conduct-indicator" style="margin-top: 10px;">
+                        <div class="conduct-bar-container">
+                            <div class="conduct-bar-label">
+                                <strong>Puntos de Conducta:</strong> 
+                                <span style="color: ${conductColor}; font-weight: bold; font-size: 16px;">
+                                    ${currentConductPoints}/10
+                                </span>
+                                <span class="conduct-status" style="color: ${conductColor}; margin-left: 10px;">
+                                    (${conductStatus})
+                                </span>
+                            </div>
+                            <div class="conduct-bar" style="background: #e0e0e0; height: 20px; border-radius: 10px; margin-top: 5px; overflow: hidden; position: relative;">
+                                <div class="conduct-bar-fill" style="background: ${conductColor}; height: 100%; width: ${(currentConductPoints / initialConductPoints) * 100}%; transition: width 0.3s ease; border-radius: 10px;"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-actions">
                     <button class="btn btn-primary" onclick="viewStudentAnnotations(${student.id}, '${student.full_name}')">
@@ -170,7 +202,46 @@ window.viewStudentAnnotations = async function(studentId, studentName) {
         const response = await fetch(`/api/students/${studentId}/annotations`);
         const annotations = await response.json();
         
-        let html = `<h2>Anotaciones de ${studentName}</h2>`;
+        const totalPointsDeducted = annotations.reduce((sum, a) => sum + (a.points || 0), 0);
+        const initialConductPoints = 10;
+        const currentConductPoints = Math.max(0, initialConductPoints - totalPointsDeducted);
+        
+        // Determinar color del indicador según puntos de conducta
+        let conductColor = '#4caf50'; // Verde
+        let conductStatus = 'Excelente';
+        if (currentConductPoints <= 3) {
+            conductColor = '#d32f2f'; // Rojo
+            conductStatus = 'Crítico';
+        } else if (currentConductPoints <= 5) {
+            conductColor = '#ff9800'; // Naranja
+            conductStatus = 'Bajo';
+        } else if (currentConductPoints <= 7) {
+            conductColor = '#ffc107'; // Amarillo
+            conductStatus = 'Regular';
+        }
+        
+        let html = `
+            <h2>Anotaciones de ${studentName}</h2>
+            <div class="conduct-indicator" style="margin-bottom: 20px; padding: 15px; background: #f9f9f9; border-radius: 8px; border-left: 3px solid ${conductColor};">
+                <div class="conduct-bar-label">
+                    <strong>Puntos de Conducta Actuales:</strong> 
+                    <span style="color: ${conductColor}; font-weight: bold; font-size: 18px; margin-left: 10px;">
+                        ${currentConductPoints}/10
+                    </span>
+                    <span class="conduct-status" style="color: ${conductColor}; margin-left: 10px;">
+                        (${conductStatus})
+                    </span>
+                </div>
+                <div class="conduct-bar" style="background: #e0e0e0; height: 25px; border-radius: 12px; margin-top: 10px; overflow: hidden; position: relative;">
+                    <div class="conduct-bar-fill" style="background: ${conductColor}; height: 100%; width: ${(currentConductPoints / initialConductPoints) * 100}%; transition: width 0.3s ease; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+                        ${currentConductPoints}/10
+                    </div>
+                </div>
+                <p style="margin-top: 10px; font-size: 12px; color: #666;">
+                    Puntos descontados: ${totalPointsDeducted} | Total de anotaciones: ${annotations.length}
+                </p>
+            </div>
+        `;
         
         if (annotations.length === 0) {
             html += '<p>No hay anotaciones registradas</p>';
@@ -180,7 +251,7 @@ window.viewStudentAnnotations = async function(studentId, studentName) {
                 const date = new Date(ann.date);
                 html += `
                     <div class="annotation-item" style="padding: 15px; margin-bottom: 10px; background: #f5f5f5; border-radius: 5px; border-left: 4px solid ${getAnnotationColor(ann.annotation_type)}">
-                        <strong>${getAnnotationTypeLabel(ann.annotation_type)}</strong> - ${ann.points} puntos
+                        <strong>${getAnnotationTypeLabel(ann.annotation_type)}</strong> - ${ann.points} puntos descontados
                         <p>${ann.description || 'Sin descripción'}</p>
                         <small>Por: ${ann.teacher_name} - ${date.toLocaleString()}</small>
                     </div>
