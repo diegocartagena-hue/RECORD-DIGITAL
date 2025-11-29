@@ -216,14 +216,21 @@ app.post('/api/emergency', requireAuth, async (req, res) => {
     `, [user.id, grade_id, message || 'Solicitud de asistencia urgente']);
     
     // Notificar a coordinadores en tiempo real
-    io.to('coordinators').emit('emergency_request', {
+    const emergencyData = {
       request_id: result.lastID,
       teacher: user.full_name,
       grade_id: grade_id,
       grade_number: grade.grade_number,
       section: grade.section,
-      message: message || 'Solicitud de asistencia urgente'
-    });
+      message: message || 'Solicitud de asistencia urgente',
+      created_at: new Date().toISOString()
+    };
+    
+    console.log('Enviando alerta de emergencia a coordinadores:', emergencyData);
+    io.to('coordinators').emit('emergency_request', emergencyData);
+    
+    // También emitir a todos los sockets por si acaso (fallback)
+    io.emit('emergency_request', emergencyData);
     
     res.json({ success: true, request_id: result.lastID });
   } catch (error) {
@@ -484,9 +491,19 @@ app.post('/api/database/new-year', requireAuth, requireRole('admin'), async (req
 io.on('connection', (socket) => {
   console.log('Cliente conectado:', socket.id);
   
-  socket.on('join_coordinator_room', () => {
-    socket.join('coordinators');
-    socket.emit('joined_room', { room: 'coordinators' });
+  socket.on('join_coordinator_room', async () => {
+    try {
+      // Obtener información de la sesión del socket
+      const handshake = socket.handshake;
+      const sessionId = handshake.headers.cookie?.match(/connect\.sid=([^;]+)/)?.[1];
+      
+      // Unirse a la sala de coordinadores
+      socket.join('coordinators');
+      console.log(`Cliente ${socket.id} unido a la sala de coordinadores`);
+      socket.emit('joined_room', { room: 'coordinators' });
+    } catch (error) {
+      console.error('Error uniendo a sala de coordinadores:', error);
+    }
   });
   
   socket.on('disconnect', () => {

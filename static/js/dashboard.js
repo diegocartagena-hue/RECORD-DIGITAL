@@ -753,6 +753,7 @@ function showEmergencyModal() {
                 };
                 
                 try {
+                    console.log('Enviando solicitud de emergencia:', data);
                     const response = await fetch('/api/emergency', {
                         method: 'POST',
                         headers: {
@@ -762,15 +763,18 @@ function showEmergencyModal() {
                     });
                     
                     const result = await response.json();
+                    console.log('Respuesta del servidor:', result);
                     
                     if (result.success) {
-                        showNotification('Solicitud de emergencia enviada', 'success');
+                        showNotification('✅ Solicitud de emergencia enviada correctamente', 'success');
                         closeModal();
                     } else {
                         showNotification(result.error || 'Error al enviar solicitud', 'error');
+                        console.error('Error en respuesta:', result);
                     }
                 } catch (error) {
-                    showNotification('Error de conexión', 'error');
+                    console.error('Error enviando emergencia:', error);
+                    showNotification('Error de conexión al enviar solicitud', 'error');
                 }
             });
         });

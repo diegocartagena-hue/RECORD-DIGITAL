@@ -82,34 +82,62 @@ async function checkAuth() {
 }
 
 function initWebSocket() {
-    socket = io();
+    socket = io({
+        transports: ['websocket', 'polling'],
+        reconnection: true,
+        reconnectionDelay: 1000,
+        reconnectionAttempts: 5
+    });
     
     socket.on('connect', () => {
-        console.log('Conectado al servidor WebSocket');
-        // Esperar a que currentUser esté disponible
-        setTimeout(() => {
-            if (currentUser && (currentUser.role === 'coordinator' || currentUser.role === 'admin')) {
-                socket.emit('join_coordinator_room');
-                console.log('Unido a la sala de coordinadores');
-            }
-        }, 500);
+        console.log('✅ Conectado al servidor WebSocket, ID:', socket.id);
+        joinCoordinatorRoomIfNeeded();
+    });
+    
+    socket.on('connect_error', (error) => {
+        console.error('❌ Error de conexión WebSocket:', error);
+    });
+    
+    socket.on('disconnect', (reason) => {
+        console.log('⚠️ Desconectado del servidor WebSocket:', reason);
+    });
+    
+    socket.on('reconnect', (attemptNumber) => {
+        console.log('🔄 Reconectado al servidor WebSocket después de', attemptNumber, 'intentos');
+        joinCoordinatorRoomIfNeeded();
     });
     
     socket.on('joined_room', (data) => {
-        console.log('Unido a la sala:', data.room);
+        console.log('✅ Unido a la sala:', data.room);
     });
     
     socket.on('emergency_request', (data) => {
+        console.log('🚨 Alerta de emergencia recibida:', data);
+        
+        // Verificar si el usuario actual es coordinador o admin
         if (currentUser && (currentUser.role === 'coordinator' || currentUser.role === 'admin')) {
             const gradeInfo = data.grade_number && data.section 
                 ? `${data.grade_number}° ${data.section}` 
                 : `grado ${data.grade_id}`;
-            showNotification(`🚨 Emergencia: ${data.teacher} necesita asistencia en ${gradeInfo}`, 'warning');
+            
+            // Mostrar notificación más visible
+            showNotification(`🚨 EMERGENCIA: ${data.teacher} necesita asistencia urgente en ${gradeInfo}`, 'warning');
+            
+            // Mostrar alerta del navegador si está permitido
+            if (Notification.permission === 'granted') {
+                new Notification('🚨 Emergencia', {
+                    body: `${data.teacher} necesita asistencia en ${gradeInfo}`,
+                    icon: '/images/emergency.png',
+                    tag: 'emergency-' + data.request_id
+                });
+            }
+            
             // Recargar solicitudes de emergencia si estamos en esa página
             const emergencyPage = document.getElementById('emergencyPage');
             if (emergencyPage && emergencyPage.classList.contains('active')) {
                 loadEmergencyRequests();
             }
+            
             // Actualizar contador de emergencias en el dashboard
             if (typeof loadDashboardStats === 'function') {
                 loadDashboardStats();
@@ -117,11 +145,29 @@ function initWebSocket() {
         }
     });
     
+    // Función para unirse a la sala de coordinadores
+    function joinCoordinatorRoomIfNeeded() {
+        if (currentUser && (currentUser.role === 'coordinator' || currentUser.role === 'admin')) {
+            socket.emit('join_coordinator_room');
+            console.log('📢 Solicitando unirse a la sala de coordinadores...');
+        }
+    }
+    
+    // Intentar unirse cuando currentUser esté disponible
+    if (currentUser) {
+        joinCoordinatorRoomIfNeeded();
+    }
+    
     socket.on('new_annotation', (data) => {
         if (currentUser && (currentUser.role === 'coordinator' || currentUser.role === 'admin')) {
             showNotification(`Nueva anotación registrada por ${data.teacher}`, 'success');
         }
     });
+    
+    // Solicitar permiso para notificaciones del navegador
+    if ('Notification' in window && Notification.permission === 'default') {
+        Notification.requestPermission();
+    }
 }
 
 function initNavigation() {
@@ -212,12 +258,26 @@ async function loadUserData() {
         const response = await fetch('/api/user/current');
         if (response.ok) {
             currentUser = await response.json();
+            console.log('Usuario cargado:', currentUser);
             // Configurar visibilidad de menús según el rol
             setupMenuVisibility();
             
             // Si el usuario es coordinador o admin y el socket ya está conectado, unirse a la sala
-            if (socket && socket.connected && (currentUser.role === 'coordinator' || currentUser.role === 'admin')) {
-                socket.emit('join_coordinator_room');
+            if (socket) {
+                if (socket.connected) {
+                    if (currentUser.role === 'coordinator' || currentUser.role === 'admin') {
+                        socket.emit('join_coordinator_room');
+                        console.log('📢 Uniéndose a la sala de coordinadores después de cargar usuario');
+                    }
+                } else {
+                    // Esperar a que se conecte
+                    socket.once('connect', () => {
+                        if (currentUser.role === 'coordinator' || currentUser.role === 'admin') {
+                            socket.emit('join_coordinator_room');
+                            console.log('📢 Uniéndose a la sala de coordinadores después de reconexión');
+                        }
+                    });
+                }
             }
         }
     } catch (error) {
