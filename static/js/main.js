@@ -240,6 +240,9 @@ function showPage(pageName) {
     loadPageData(pageName);
 }
 
+// Hacer showPage disponible globalmente
+window.showPage = showPage;
+
 function loadPageData(pageName) {
     switch(pageName) {
         case 'dashboard':
@@ -364,6 +367,8 @@ async function handleLogout() {
 }
 
 // ==================== NOTIFICACIONES ====================
+let emergencyNotifications = new Map(); // Para almacenar notificaciones persistentes
+
 function showNotification(message, type = 'info') {
     const notificationsDiv = document.getElementById('notifications');
     if (!notificationsDiv) return;
@@ -374,10 +379,114 @@ function showNotification(message, type = 'info') {
     
     notificationsDiv.appendChild(notification);
     
-    // Remover después de 5 segundos
-    setTimeout(() => {
+    // Remover después de 5 segundos (excepto emergencias)
+    if (type !== 'emergency') {
+        setTimeout(() => {
+            notification.remove();
+        }, 5000);
+    }
+}
+
+function showPersistentEmergencyNotification(data, gradeInfo) {
+    const notificationsDiv = document.getElementById('notifications');
+    if (!notificationsDiv) return;
+    
+    // Si ya existe una notificación para esta emergencia, no crear otra
+    if (emergencyNotifications.has(data.request_id)) {
+        return;
+    }
+    
+    const notification = document.createElement('div');
+    notification.className = 'notification emergency persistent';
+    notification.id = `emergency-${data.request_id}`;
+    notification.innerHTML = `
+        <div class="emergency-notification-content">
+            <div class="emergency-alert-icon">🚨</div>
+            <div class="emergency-notification-text">
+                <strong>EMERGENCIA</strong>
+                <p>${data.teacher} necesita asistencia urgente en ${gradeInfo}</p>
+                <small>${data.message || 'Solicitud de asistencia urgente'}</small>
+            </div>
+            <div class="emergency-notification-actions">
+                <button class="btn btn-sm btn-primary" onclick="goToEmergencyPage()">Ver Detalles</button>
+                <button class="btn btn-sm btn-secondary" onclick="dismissEmergencyNotification(${data.request_id})">Cerrar</button>
+            </div>
+        </div>
+    `;
+    
+    notificationsDiv.appendChild(notification);
+    emergencyNotifications.set(data.request_id, notification);
+    
+    // Hacer parpadear la notificación
+    notification.style.animation = 'pulse 2s infinite';
+}
+
+// Funciones globales para notificaciones
+window.dismissEmergencyNotification = function(requestId) {
+    const notification = document.getElementById(`emergency-${requestId}`);
+    if (notification) {
         notification.remove();
-    }, 5000);
+        emergencyNotifications.delete(requestId);
+    }
+}
+
+window.goToEmergencyPage = function() {
+    showPage('emergency');
+    const navMenu = document.getElementById('navMenu');
+    if (navMenu) {
+        navMenu.classList.remove('active');
+    }
+}
+
+// Función para reproducir alarma sonora
+function playEmergencyAlarm() {
+    // Crear un contexto de audio para generar un sonido de alarma
+    try {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.value = 800; // Frecuencia alta para alarma
+        oscillator.type = 'sine';
+        
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+        
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.5);
+        
+        // Repetir 3 veces
+        setTimeout(() => {
+            const oscillator2 = audioContext.createOscillator();
+            const gainNode2 = audioContext.createGain();
+            oscillator2.connect(gainNode2);
+            gainNode2.connect(audioContext.destination);
+            oscillator2.frequency.value = 800;
+            oscillator2.type = 'sine';
+            gainNode2.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode2.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+            oscillator2.start(audioContext.currentTime);
+            oscillator2.stop(audioContext.currentTime + 0.5);
+        }, 600);
+        
+        setTimeout(() => {
+            const oscillator3 = audioContext.createOscillator();
+            const gainNode3 = audioContext.createGain();
+            oscillator3.connect(gainNode3);
+            gainNode3.connect(audioContext.destination);
+            oscillator3.frequency.value = 800;
+            oscillator3.type = 'sine';
+            gainNode3.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode3.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+            oscillator3.start(audioContext.currentTime);
+            oscillator3.stop(audioContext.currentTime + 0.5);
+        }, 1200);
+    } catch (error) {
+        console.error('Error reproduciendo alarma:', error);
+    }
 }
 
 // ==================== MODAL ====================
@@ -410,6 +519,9 @@ function closeModal() {
         modal.classList.remove('active');
     }
 }
+
+// Hacer closeModal disponible globalmente
+window.closeModal = closeModal;
 
 // ==================== FUNCIONES DE CARGA DE PÁGINAS ====================
 async function loadDashboard() {

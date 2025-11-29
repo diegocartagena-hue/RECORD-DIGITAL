@@ -953,29 +953,103 @@ function showEmergencyModal() {
         });
 }
 
-// Hacer la función disponible globalmente
-window.resolveEmergency = async function(requestId) {
+// Funciones globales para emergencias
+window.setEmergencyStatus = async function(requestId, status) {
     try {
-        const response = await fetch(`/api/emergency/${requestId}/resolve`, {
-            method: 'POST'
+        const response = await fetch(`/api/emergency/${requestId}/status`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ status: status })
         });
         
         const result = await response.json();
         
         if (result.success) {
-            showNotification('Emergencia resuelta', 'success');
+            const statusText = status === 'in_progress' ? 'marcada como "En Camino"' : 'actualizada';
+            showNotification(`Emergencia ${statusText}`, 'success');
+            
+            // Cerrar notificación persistente si existe
+            if (typeof dismissEmergencyNotification === 'function') {
+                dismissEmergencyNotification(requestId);
+            }
+            
             loadEmergencyRequests();
-            // Actualizar contador en dashboard
             if (typeof loadDashboardStats === 'function') {
                 loadDashboardStats();
             }
         } else {
-            showNotification(result.error || 'Error al resolver emergencia', 'error');
+            showNotification(result.error || 'Error al actualizar emergencia', 'error');
         }
     } catch (error) {
-        console.error('Error resolviendo emergencia:', error);
+        console.error('Error actualizando emergencia:', error);
         showNotification('Error de conexión', 'error');
     }
+}
+
+window.showResolveEmergencyModal = function(requestId) {
+    const html = `
+        <h2>Resolver Emergencia</h2>
+        <form id="resolveEmergencyForm">
+            <div class="form-group">
+                <label>Notas de Resolución</label>
+                <textarea id="resolutionNotes" class="form-control" rows="4" placeholder="Describa cómo se resolvió la emergencia..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-success">Marcar como Resuelto</button>
+            <button type="button" class="btn btn-secondary" onclick="closeModal()" style="margin-left: 10px;">Cancelar</button>
+        </form>
+    `;
+    
+    showModal(html);
+    
+    const form = document.getElementById('resolveEmergencyForm');
+    if (form) {
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const resolutionNotes = document.getElementById('resolutionNotes').value.trim();
+            
+            try {
+                const response = await fetch(`/api/emergency/${requestId}/status`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        status: 'resolved',
+                        resolution_notes: resolutionNotes
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showNotification('Emergencia resuelta exitosamente', 'success');
+                    closeModal();
+                    
+                    // Cerrar notificación persistente
+                    if (typeof dismissEmergencyNotification === 'function') {
+                        dismissEmergencyNotification(requestId);
+                    }
+                    
+                    loadEmergencyRequests();
+                    if (typeof loadDashboardStats === 'function') {
+                        loadDashboardStats();
+                    }
+                } else {
+                    showNotification(result.error || 'Error al resolver emergencia', 'error');
+                }
+            } catch (error) {
+                console.error('Error resolviendo emergencia:', error);
+                showNotification('Error de conexión', 'error');
+            }
+        });
+    }
+}
+
+window.resolveEmergency = async function(requestId) {
+    showResolveEmergencyModal(requestId);
 }
 
 // ==================== ADMINISTRACIÓN ====================
