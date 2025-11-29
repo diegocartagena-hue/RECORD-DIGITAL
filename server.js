@@ -152,6 +152,26 @@ app.get('/api/students/:studentId/annotations', requireAuth, async (req, res) =>
   }
 });
 
+app.put('/api/annotations/:annotationId', requireAuth, requireRole('admin'), async (req, res) => {
+  try {
+    const { annotation_type, points, description } = req.body;
+    
+    if (!annotation_type || !points) {
+      return res.status(400).json({ error: 'Se requieren annotation_type y points' });
+    }
+    
+    await dbRun(`
+      UPDATE annotations 
+      SET annotation_type = ?, points = ?, description = ?
+      WHERE id = ?
+    `, [annotation_type, points, description || '', req.params.annotationId]);
+    
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.get('/api/statistics/top-students', requireAuth, async (req, res) => {
   try {
     const gradeId = req.query.grade_id;
@@ -226,8 +246,11 @@ app.post('/api/emergency', requireAuth, async (req, res) => {
       created_at: new Date().toISOString()
     };
     
-    console.log('Enviando alerta de emergencia a coordinadores:', emergencyData);
+    console.log('Enviando alerta de emergencia a coordinadores y administradores:', emergencyData);
+    
+    // Notificar a coordinadores y administradores
     io.to('coordinators').emit('emergency_request', emergencyData);
+    io.to('admins').emit('emergency_request', emergencyData);
     
     // También emitir a todos los sockets por si acaso (fallback)
     io.emit('emergency_request', emergencyData);
@@ -280,15 +303,70 @@ app.delete('/api/teachers/:teacherId', requireAuth, requireRole('coordinator', '
 
 app.get('/api/emergency/requests', requireAuth, requireRole('coordinator', 'admin'), async (req, res) => {
   try {
-    const requests = await dbAll(`
+    const status = req.query.status || 'pending';
+    let query = `
       SELECT er.*, u.full_name as teacher_name, g.grade_number, g.section
       FROM emergency_requests er
       JOIN users u ON er.teacher_id = u.id
       JOIN grades g ON er.grade_id = g.id
-      WHERE er.status = 'pending'
-      ORDER BY er.created_at DESC
-    `);
+    `;
+    
+    if (status === 'all') {
+      query += ` ORDER BY er.created_at DESC`;
+    } else {
+      query += ` WHERE er.status = ? ORDER BY er.created_at DESC`;
+    }
+    
+    const requests = status === 'all' 
+      ? await dbAll(query)
+      : await dbAll(query, [status]);
     res.json(requests);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/emergency/:requestId/status', requireAuth, requireRole('coordinator', 'admin'), async (req, res) => {
+  try {
+    const { status, resolution_notes } = req.body;
+    
+    if (!['pending', 'in_progress', 'resolved'].includes(status)) {
+      return res.status(400).json({ error: 'Estado inválido' });
+    }
+    
+    let query = `UPDATE emergency_requests SET status = ?`;
+    let params = [status, req.params.requestId];
+    
+    if (status === 'resolved') {
+      query += `, resolved_at = datetime('now')`;
+      if (resolution_notes) {
+        query += `, resolution_notes = ?`;
+        params.splice(1, 0, resolution_notes);
+      }
+    }
+    
+    query += ` WHERE id = ?`;
+    
+    await dbRun(query, params);
+    
+    // Notificar al maestro sobre el cambio de estado
+    const request = await dbGet(`
+      SELECT er.*, u.full_name as teacher_name, g.grade_number, g.section
+      FROM emergency_requests er
+      JOIN users u ON er.teacher_id = u.id
+      JOIN grades g ON er.grade_id = g.id
+      WHERE er.id = ?
+    `, [req.params.requestId]);
+    
+    if (request) {
+      io.emit('emergency_status_update', {
+        request_id: req.params.requestId,
+        status: status,
+        teacher_name: request.teacher_name
+      });
+    }
+    
+    res.json({ success: true });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -296,11 +374,18 @@ app.get('/api/emergency/requests', requireAuth, requireRole('coordinator', 'admi
 
 app.post('/api/emergency/:requestId/resolve', requireAuth, requireRole('coordinator', 'admin'), async (req, res) => {
   try {
-    await dbRun(`
-      UPDATE emergency_requests 
-      SET status = 'resolved', resolved_at = datetime('now')
-      WHERE id = ?
-    `, [req.params.requestId]);
+    const { resolution_notes } = req.body;
+    let query = `UPDATE emergency_requests SET status = 'resolved', resolved_at = datetime('now')`;
+    let params = [req.params.requestId];
+    
+    if (resolution_notes) {
+      query += `, resolution_notes = ?`;
+      params.unshift(resolution_notes);
+    }
+    
+    query += ` WHERE id = ?`;
+    
+    await dbRun(query, params);
     res.json({ success: true });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -493,16 +578,21 @@ io.on('connection', (socket) => {
   
   socket.on('join_coordinator_room', async () => {
     try {
-      // Obtener información de la sesión del socket
-      const handshake = socket.handshake;
-      const sessionId = handshake.headers.cookie?.match(/connect\.sid=([^;]+)/)?.[1];
-      
-      // Unirse a la sala de coordinadores
       socket.join('coordinators');
       console.log(`Cliente ${socket.id} unido a la sala de coordinadores`);
       socket.emit('joined_room', { room: 'coordinators' });
     } catch (error) {
       console.error('Error uniendo a sala de coordinadores:', error);
+    }
+  });
+  
+  socket.on('join_admin_room', async () => {
+    try {
+      socket.join('admins');
+      console.log(`Cliente ${socket.id} unido a la sala de administradores`);
+      socket.emit('joined_room', { room: 'admins' });
+    } catch (error) {
+      console.error('Error uniendo a sala de administradores:', error);
     }
   });
   

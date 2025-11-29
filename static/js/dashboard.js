@@ -220,6 +220,8 @@ window.viewStudentAnnotations = async function(studentId, studentName) {
             conductStatus = 'Regular';
         }
         
+        const isAdmin = currentUser && currentUser.role === 'admin';
+        
         let html = `
             <h2>Anotaciones de ${studentName}</h2>
             <div class="conduct-indicator" style="margin-bottom: 20px; padding: 15px; background: #f9f9f9; border-radius: 8px; border-left: 3px solid ${conductColor};">
@@ -249,11 +251,17 @@ window.viewStudentAnnotations = async function(studentId, studentName) {
             html += '<div class="annotations-list">';
             annotations.forEach(ann => {
                 const date = new Date(ann.date);
+                const editButton = isAdmin ? `
+                    <button class="btn btn-sm btn-primary" onclick="showEditAnnotationModal(${ann.id}, '${ann.annotation_type}', ${ann.points}, '${(ann.description || '').replace(/'/g, "\\'")}')" style="margin-top: 5px;">
+                        ✏️ Editar
+                    </button>
+                ` : '';
                 html += `
                     <div class="annotation-item" style="padding: 15px; margin-bottom: 10px; background: #f5f5f5; border-radius: 5px; border-left: 4px solid ${getAnnotationColor(ann.annotation_type)}">
                         <strong>${getAnnotationTypeLabel(ann.annotation_type)}</strong> - ${ann.points} puntos descontados
                         <p>${ann.description || 'Sin descripción'}</p>
                         <small>Por: ${ann.teacher_name} - ${date.toLocaleString()}</small>
+                        ${editButton}
                     </div>
                 `;
             });
@@ -264,6 +272,84 @@ window.viewStudentAnnotations = async function(studentId, studentName) {
     } catch (error) {
         console.error('Error cargando anotaciones:', error);
         showNotification('Error al cargar anotaciones', 'error');
+    }
+}
+
+window.showEditAnnotationModal = function(annotationId, currentType, currentPoints, currentDescription) {
+    const html = `
+        <h2>Editar Anotación</h2>
+        <form id="editAnnotationForm">
+            <div class="form-group">
+                <label>Tipo de Falta</label>
+                <select id="editAnnotationType" class="form-control" required>
+                    <option value="leve" ${currentType === 'leve' ? 'selected' : ''}>Leve (5 puntos)</option>
+                    <option value="grave" ${currentType === 'grave' ? 'selected' : ''}>Grave (10 puntos)</option>
+                    <option value="muy_grave" ${currentType === 'muy_grave' ? 'selected' : ''}>Muy Grave (20 puntos)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Puntos</label>
+                <input type="number" id="editAnnotationPoints" class="form-control" value="${currentPoints}" required>
+            </div>
+            <div class="form-group">
+                <label>Descripción</label>
+                <textarea id="editAnnotationDescription" class="form-control" rows="4">${currentDescription || ''}</textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+            <button type="button" class="btn btn-secondary" onclick="closeModal()" style="margin-left: 10px;">Cancelar</button>
+        </form>
+    `;
+    
+    showModal(html);
+    
+    // Actualizar puntos cuando cambie el tipo
+    document.getElementById('editAnnotationType').addEventListener('change', (e) => {
+        const type = e.target.value;
+        const pointsInput = document.getElementById('editAnnotationPoints');
+        if (type === 'leve') {
+            pointsInput.value = 5;
+        } else if (type === 'grave') {
+            pointsInput.value = 10;
+        } else if (type === 'muy_grave') {
+            pointsInput.value = 20;
+        }
+    });
+    
+    const form = document.getElementById('editAnnotationForm');
+    if (form) {
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const data = {
+                annotation_type: document.getElementById('editAnnotationType').value,
+                points: parseInt(document.getElementById('editAnnotationPoints').value),
+                description: document.getElementById('editAnnotationDescription').value.trim()
+            };
+            
+            try {
+                const response = await fetch(`/api/annotations/${annotationId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showNotification('Anotación actualizada exitosamente', 'success');
+                    closeModal();
+                    // Recargar la vista de anotaciones si está abierta
+                    // Esto requeriría pasar el studentId, pero por ahora cerramos y el usuario puede volver a abrir
+                } else {
+                    showNotification(result.error || 'Error al actualizar anotación', 'error');
+                }
+            } catch (error) {
+                console.error('Error actualizando anotación:', error);
+                showNotification('Error de conexión', 'error');
+            }
+        });
     }
 }
 
@@ -677,7 +763,8 @@ function showAddGradeModal() {
 // ==================== EMERGENCIAS ====================
 async function loadEmergencyRequests() {
     try {
-        const response = await fetch('/api/emergency/requests');
+        // Cargar todas las emergencias (pendientes, en progreso y resueltas)
+        const response = await fetch('/api/emergency/requests?status=all');
         if (!response.ok) {
             console.error('No autorizado para ver emergencias');
             return;
@@ -687,31 +774,117 @@ async function loadEmergencyRequests() {
         const container = document.getElementById('emergencyRequests');
         if (!container) return;
         
-        if (requests.length === 0) {
-            container.innerHTML = '<p class="text-center">No hay solicitudes de emergencia pendientes</p>';
-            return;
-        }
+        // Filtrar por estado
+        const pendingRequests = requests.filter(r => r.status === 'pending');
+        const inProgressRequests = requests.filter(r => r.status === 'in_progress');
+        const resolvedRequests = requests.filter(r => r.status === 'resolved');
         
         container.innerHTML = '';
         
-        requests.forEach(req => {
-            const date = new Date(req.created_at);
-            const card = document.createElement('div');
-            card.className = 'emergency-card';
-            card.innerHTML = `
-                <h3>🚨 ${req.teacher_name}</h3>
-                <p><strong>Grado:</strong> ${req.grade_number}° ${req.section}</p>
-                <p><strong>Mensaje:</strong> ${req.message || 'Solicitud de asistencia urgente'}</p>
-                <p class="emergency-time">${date.toLocaleString()}</p>
-                <button class="btn btn-success" onclick="resolveEmergency(${req.id})">
-                    Marcar como Resuelto
-                </button>
-            `;
-            container.appendChild(card);
-        });
+        // Mostrar pendientes primero
+        if (pendingRequests.length > 0) {
+            const section = document.createElement('div');
+            section.className = 'emergency-section';
+            section.innerHTML = '<h3 style="color: #d32f2f; margin-bottom: 15px;">🚨 Pendientes</h3>';
+            container.appendChild(section);
+            
+            pendingRequests.forEach(req => {
+                section.appendChild(createEmergencyCard(req, true));
+            });
+        }
+        
+        // Mostrar en progreso
+        if (inProgressRequests.length > 0) {
+            const section = document.createElement('div');
+            section.className = 'emergency-section';
+            section.innerHTML = '<h3 style="color: #ff9800; margin-top: 30px; margin-bottom: 15px;">⏳ En Progreso</h3>';
+            container.appendChild(section);
+            
+            inProgressRequests.forEach(req => {
+                section.appendChild(createEmergencyCard(req, false));
+            });
+        }
+        
+        // Mostrar resueltas (solo últimas 10)
+        if (resolvedRequests.length > 0) {
+            const section = document.createElement('div');
+            section.className = 'emergency-section';
+            section.innerHTML = '<h3 style="color: #4caf50; margin-top: 30px; margin-bottom: 15px;">✅ Resueltas (Últimas 10)</h3>';
+            container.appendChild(section);
+            
+            resolvedRequests.slice(0, 10).forEach(req => {
+                section.appendChild(createEmergencyCard(req, false));
+            });
+        }
+        
+        if (requests.length === 0) {
+            container.innerHTML = '<p class="text-center">No hay solicitudes de emergencia</p>';
+        }
     } catch (error) {
         console.error('Error cargando emergencias:', error);
     }
+}
+
+function createEmergencyCard(req, isPending) {
+    const date = new Date(req.created_at);
+    const card = document.createElement('div');
+    card.className = `emergency-card ${req.status}`;
+    card.id = `emergency-card-${req.id}`;
+    
+    let statusBadge = '';
+    if (req.status === 'pending') {
+        statusBadge = '<span class="status-badge pending">Pendiente</span>';
+    } else if (req.status === 'in_progress') {
+        statusBadge = '<span class="status-badge in-progress">En Camino</span>';
+    } else {
+        statusBadge = '<span class="status-badge resolved">Resuelto</span>';
+    }
+    
+    let buttonsHTML = '';
+    if (req.status === 'pending') {
+        buttonsHTML = `
+            <button class="btn btn-warning" onclick="setEmergencyStatus(${req.id}, 'in_progress')">
+                🚗 En Camino
+            </button>
+            <button class="btn btn-success" onclick="showResolveEmergencyModal(${req.id})">
+                ✅ Marcar como Resuelto
+            </button>
+        `;
+    } else if (req.status === 'in_progress') {
+        buttonsHTML = `
+            <button class="btn btn-success" onclick="showResolveEmergencyModal(${req.id})">
+                ✅ Marcar como Resuelto
+            </button>
+        `;
+    }
+    
+    let resolutionHTML = '';
+    if (req.status === 'resolved' && req.resolution_notes) {
+        const resolvedDate = req.resolved_at ? new Date(req.resolved_at) : null;
+        resolutionHTML = `
+            <div class="resolution-section" style="margin-top: 15px; padding: 10px; background: #e8f5e9; border-radius: 5px; border-left: 3px solid #4caf50;">
+                <strong>Resolución:</strong>
+                <p>${req.resolution_notes}</p>
+                ${resolvedDate ? `<small>Resuelto el: ${resolvedDate.toLocaleString()}</small>` : ''}
+            </div>
+        `;
+    }
+    
+    card.innerHTML = `
+        <div class="emergency-card-header">
+            <h3>🚨 ${req.teacher_name}</h3>
+            ${statusBadge}
+        </div>
+        <p><strong>Grado:</strong> ${req.grade_number}° ${req.section}</p>
+        <p><strong>Mensaje:</strong> ${req.message || 'Solicitud de asistencia urgente'}</p>
+        <p class="emergency-time">Solicitado: ${date.toLocaleString()}</p>
+        ${resolutionHTML}
+        <div class="emergency-card-actions" style="margin-top: 15px; display: flex; gap: 10px;">
+            ${buttonsHTML}
+        </div>
+    `;
+    
+    return card;
 }
 
 function showEmergencyModal() {

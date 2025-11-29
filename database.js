@@ -85,10 +85,15 @@ function initDb() {
             status TEXT DEFAULT 'pending',
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             resolved_at TIMESTAMP,
+            resolution_notes TEXT,
             FOREIGN KEY (teacher_id) REFERENCES users(id),
             FOREIGN KEY (grade_id) REFERENCES grades(id)
           )
         `, () => {
+          // Agregar columna resolution_notes si no existe (para bases de datos existentes)
+          db.run(`ALTER TABLE emergency_requests ADD COLUMN resolution_notes TEXT`, (err) => {
+            // Ignorar error si la columna ya existe
+          });
           // Crear usuarios por defecto
           createDefaultUsers().then(() => {
             console.log('Base de datos inicializada correctamente');

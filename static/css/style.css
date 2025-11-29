@@ -435,6 +435,112 @@ textarea.form-control {
 .emergency-card {
     background: var(--white);
     padding: 20px;
+    border-left: 5px solid var(--primary-dark);
+    margin-bottom: 15px;
+}
+
+.emergency-card.pending {
+    border-left-color: #d32f2f;
+    background: #ffebee;
+}
+
+.emergency-card.in_progress {
+    border-left-color: #ff9800;
+    background: #fff3e0;
+}
+
+.emergency-card.resolved {
+    border-left-color: #4caf50;
+    background: #e8f5e9;
+}
+
+.emergency-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.status-badge {
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.status-badge.pending {
+    background: #d32f2f;
+    color: white;
+}
+
+.status-badge.in-progress {
+    background: #ff9800;
+    color: white;
+}
+
+.status-badge.resolved {
+    background: #4caf50;
+    color: white;
+}
+
+.notification.emergency.persistent {
+    background: #ffebee;
+    border-left: 5px solid #d32f2f;
+    padding: 15px;
+    margin-bottom: 10px;
+    animation: pulse 2s infinite;
+}
+
+.emergency-notification-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.emergency-alert-icon {
+    font-size: 32px;
+    animation: shake 0.5s infinite;
+}
+
+.emergency-notification-text {
+    flex: 1;
+}
+
+.emergency-notification-text strong {
+    color: #d32f2f;
+    font-size: 16px;
+}
+
+.emergency-notification-actions {
+    display: flex;
+    gap: 10px;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+@keyframes shake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-5px);
+    }
+    75% {
+        transform: translateX(5px);
+    }
+}
+
+.emergency-section {
+    margin-bottom: 30px;
+}
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     border-left: 5px solid var(--red);
