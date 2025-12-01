@@ -43,44 +43,50 @@ body {
 .login-page::before {
     content: '';
     position: absolute;
-    width: 500px;
-    height: 500px;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    width: 800px;
+    height: 800px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 40%, transparent 70%);
     border-radius: 50%;
-    top: -250px;
-    left: -250px;
-    animation: moveCircle1 20s ease-in-out infinite;
+    top: -400px;
+    left: -400px;
+    animation: moveCircle1 15s ease-in-out infinite;
     pointer-events: none;
 }
 
 .login-page::after {
     content: '';
     position: absolute;
-    width: 400px;
-    height: 400px;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 40%, transparent 70%);
     border-radius: 50%;
-    bottom: -200px;
-    right: -200px;
-    animation: moveCircle2 25s ease-in-out infinite;
+    bottom: -350px;
+    right: -350px;
+    animation: moveCircle2 18s ease-in-out infinite;
     pointer-events: none;
 }
 
 @keyframes moveCircle1 {
     0%, 100% {
-        transform: translate(0, 0);
+        transform: translate(0, 0) scale(1);
     }
-    50% {
-        transform: translate(100px, 100px);
+    33% {
+        transform: translate(200px, 150px) scale(1.1);
+    }
+    66% {
+        transform: translate(150px, 200px) scale(0.9);
     }
 }
 
 @keyframes moveCircle2 {
     0%, 100% {
-        transform: translate(0, 0);
+        transform: translate(0, 0) scale(1);
     }
-    50% {
-        transform: translate(-80px, -80px);
+    33% {
+        transform: translate(-180px, -150px) scale(1.1);
+    }
+    66% {
+        transform: translate(-150px, -180px) scale(0.9);
     }
 }
 
@@ -103,14 +109,7 @@ body {
         inset 0 1px 0 0 rgba(255, 255, 255, 0.3);
     border: 1px solid rgba(255, 255, 255, 0.18);
     animation: slideUp 0.6s ease-out;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.login-box:hover {
-    transform: translateY(-5px);
-    box-shadow: 
-        0 12px 40px 0 rgba(31, 38, 135, 0.5),
-        inset 0 1px 0 0 rgba(255, 255, 255, 0.4);
+    transition: box-shadow 0.3s ease;
 }
 
 @keyframes slideUp {
@@ -185,7 +184,6 @@ body {
     box-shadow: 
         0 0 0 4px rgba(255, 255, 255, 0.1),
         inset 0 2px 4px rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px);
 }
 
 .login-form .btn-primary {
@@ -210,26 +208,25 @@ body {
 .login-form .btn-primary:hover {
     background: rgba(255, 255, 255, 0.35);
     border-color: rgba(255, 255, 255, 0.5);
-    transform: translateY(-2px);
     box-shadow: 
         0 6px 20px rgba(0, 0, 0, 0.3),
         inset 0 1px 0 rgba(255, 255, 255, 0.4);
 }
 
 .login-form .btn-primary:active {
-    transform: translateY(0);
     box-shadow: 
         0 2px 10px rgba(0, 0, 0, 0.2),
         inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 .login-form .error-message {
-    background: rgba(211, 47, 47, 0.2);
+    background: rgba(211, 47, 47, 0.3);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(211, 47, 47, 0.4);
-    color: rgba(255, 255, 255, 0.95);
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(211, 47, 47, 0.5);
+    color: var(--white);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    font-weight: 500;
 }
 
 /* ==================== NAVEGACIÓN ==================== */
