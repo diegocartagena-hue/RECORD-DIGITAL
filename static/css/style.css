@@ -39,54 +39,104 @@ body {
     background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 50%, var(--primary-light) 100%);
 }
 
-/* Círculos animados de fondo */
+/* Círculos animados de fondo - Más visibles */
 .login-page::before {
     content: '';
     position: absolute;
-    width: 800px;
-    height: 800px;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 40%, transparent 70%);
+    width: 1200px;
+    height: 1200px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.2) 25%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.05) 70%, transparent 85%);
     border-radius: 50%;
-    top: -400px;
-    left: -400px;
-    animation: moveCircle1 15s ease-in-out infinite;
+    top: -600px;
+    left: -600px;
+    animation: moveCircle1 10s ease-in-out infinite;
     pointer-events: none;
+    z-index: 0;
 }
 
 .login-page::after {
     content: '';
     position: absolute;
-    width: 700px;
-    height: 700px;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 40%, transparent 70%);
+    width: 1100px;
+    height: 1100px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.18) 25%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.04) 70%, transparent 85%);
     border-radius: 50%;
-    bottom: -350px;
-    right: -350px;
-    animation: moveCircle2 18s ease-in-out infinite;
+    bottom: -550px;
+    right: -550px;
+    animation: moveCircle2 12s ease-in-out infinite;
     pointer-events: none;
+    z-index: 0;
 }
 
 @keyframes moveCircle1 {
-    0%, 100% {
+    0% {
         transform: translate(0, 0) scale(1);
+        opacity: 0.8;
     }
-    33% {
-        transform: translate(200px, 150px) scale(1.1);
+    25% {
+        transform: translate(300px, 200px) scale(1.2);
+        opacity: 1;
     }
-    66% {
-        transform: translate(150px, 200px) scale(0.9);
+    50% {
+        transform: translate(200px, 300px) scale(0.9);
+        opacity: 0.7;
+    }
+    75% {
+        transform: translate(350px, 150px) scale(1.1);
+        opacity: 0.9;
+    }
+    100% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.8;
     }
 }
 
 @keyframes moveCircle2 {
-    0%, 100% {
+    0% {
         transform: translate(0, 0) scale(1);
+        opacity: 0.7;
     }
-    33% {
-        transform: translate(-180px, -150px) scale(1.1);
+    25% {
+        transform: translate(-250px, -200px) scale(1.15);
+        opacity: 0.9;
     }
-    66% {
-        transform: translate(-150px, -180px) scale(0.9);
+    50% {
+        transform: translate(-200px, -280px) scale(0.85);
+        opacity: 0.6;
+    }
+    75% {
+        transform: translate(-300px, -150px) scale(1.05);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.7;
+    }
+}
+
+/* Elemento adicional de animación */
+.animated-bg {
+    position: absolute;
+    width: 800px;
+    height: 800px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 35%, rgba(255, 255, 255, 0.08) 60%, transparent 80%);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: pulseCircle 6s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 0;
+}
+
+@keyframes pulseCircle {
+    0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.7;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.8);
+        opacity: 0.4;
     }
 }
 
