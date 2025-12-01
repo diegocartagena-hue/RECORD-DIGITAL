@@ -178,6 +178,25 @@ body {
     margin-bottom: 35px;
 }
 
+.login-logo {
+    max-width: 200px;
+    height: auto;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.3));
+    animation: fadeInDown 0.8s ease-out;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 .login-header h1 {
     color: var(--white);
     font-size: 28px;
@@ -328,9 +347,22 @@ body {
     flex-wrap: wrap;
 }
 
+.nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.nav-logo-img {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+}
+
 .nav-logo h2 {
     padding: 15px 0;
     font-size: 20px;
+    margin: 0;
 }
 
 .nav-toggle {
@@ -929,6 +961,19 @@ textarea.form-control {
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
 
+    .nav-logo-img {
+        height: 30px;
+    }
+
+    .nav-logo h2 {
+        font-size: 16px;
+    }
+
+    .login-logo {
+        max-width: 150px;
+        margin-bottom: 15px;
+    }
+
     .page h1 {
         font-size: 24px;
     }
@@ -983,6 +1028,11 @@ textarea.form-control {
 
     .login-header h1 {
         font-size: 24px;
+    }
+
+    .login-logo {
+        max-width: 120px;
+        margin-bottom: 12px;
     }
 
     .form-card {
