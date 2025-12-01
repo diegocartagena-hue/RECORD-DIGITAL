@@ -42,3 +42,6 @@ Si npm install muestra errores, comparte el mensaje exacto.
 
 ============================================================
 
+
+
+

@@ -43,3 +43,6 @@ if /i "%abrir%"=="S" (
 
 pause
 
+
+
+

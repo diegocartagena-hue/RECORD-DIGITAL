@@ -71,3 +71,6 @@ La aplicación se iniciará en: **http://localhost:5000**
 - Las notificaciones de emergencia son en tiempo real usando WebSockets
 - Los colores del sistema son: Azul oscuro, Blanco y Rojo (Escuela Interamericana)
 
+
+
+
