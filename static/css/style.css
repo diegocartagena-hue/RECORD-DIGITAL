@@ -371,18 +371,18 @@ body {
     width: 100%;
     padding: 14px;
     margin-top: 10px;
-    background: rgba(255, 255, 255, 0.25);
+    background: rgba(139, 0, 0, 0.8);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    border: 2px solid rgba(178, 34, 34, 0.6);
     color: var(--white);
     font-weight: 600;
     font-size: 16px;
     border-radius: 12px;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
     box-shadow: 
-        0 4px 15px rgba(0, 0, 0, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        0 4px 15px rgba(139, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
