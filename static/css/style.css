@@ -518,7 +518,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     margin: 0;
     background: transparent;
     position: relative;
@@ -529,6 +529,18 @@ body {
     border-bottom: 2px solid transparent;
 }
 
+.nav-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(100, 200, 255, 0.1), rgba(150, 100, 255, 0.1));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
 .nav-link::after {
     content: '';
     position: absolute;
@@ -537,8 +549,9 @@ body {
     right: 0;
     height: 2px;
     background: rgba(100, 200, 255, 0.8);
+    box-shadow: 0 0 10px rgba(100, 200, 255, 0.6);
     transform: scaleX(0);
-    transition: transform 0.2s ease;
+    transition: transform 0.3s ease;
 }
 
 .logout-icon,
@@ -561,29 +574,64 @@ body {
 
 .nav-link:hover {
     color: var(--white);
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(100, 200, 255, 0.08);
+    text-shadow: 0 0 10px rgba(100, 200, 255, 0.8);
+}
+
+.nav-link:hover::before {
+    opacity: 1;
 }
 
 .nav-link:hover::after {
-    transform: scaleX(0.5);
+    transform: scaleX(0.6);
+    background: rgba(100, 200, 255, 1);
+    box-shadow: 
+        0 0 15px rgba(100, 200, 255, 0.8),
+        0 0 30px rgba(100, 200, 255, 0.4);
 }
 
 .nav-link.active {
     color: var(--white);
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(100, 200, 255, 0.12);
+    text-shadow: 0 0 12px rgba(100, 200, 255, 1);
+}
+
+.nav-link.active::before {
+    opacity: 1;
 }
 
 .nav-link.active::after {
     transform: scaleX(1);
+    background: rgba(100, 200, 255, 1);
+    box-shadow: 
+        0 0 20px rgba(100, 200, 255, 1),
+        0 0 40px rgba(100, 200, 255, 0.6);
 }
 
 #logoutBtn:hover {
-    background: rgba(211, 47, 47, 0.1);
+    background: rgba(211, 47, 47, 0.12);
+    text-shadow: 0 0 10px rgba(211, 47, 47, 0.8);
+}
+
+#logoutBtn:hover::before {
+    background: linear-gradient(135deg, rgba(211, 47, 47, 0.1), rgba(178, 34, 34, 0.1));
+    opacity: 1;
 }
 
 #logoutBtn:hover::after {
-    background: rgba(211, 47, 47, 0.8);
+    background: rgba(211, 47, 47, 1);
     transform: scaleX(1);
+    box-shadow: 
+        0 0 20px rgba(211, 47, 47, 1),
+        0 0 40px rgba(211, 47, 47, 0.6);
+}
+
+#logoutBtn:hover svg {
+    filter: drop-shadow(0 0 8px rgba(211, 47, 47, 0.8));
+}
+
+.profile-icon:hover svg {
+    filter: drop-shadow(0 0 8px rgba(100, 200, 255, 0.8));
 }
 
 
