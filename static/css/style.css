@@ -440,10 +440,15 @@ body {
 
 /* ==================== NAVEGACIÓN ==================== */
 .navbar {
-    background-color: var(--primary-dark);
+    background: rgba(13, 27, 42, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     color: var(--white);
     padding: 0;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 
+        0 4px 20px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -462,19 +467,14 @@ body {
 .nav-logo {
     display: flex;
     align-items: center;
-    gap: 12px;
+    padding: 10px 0;
 }
 
 .nav-logo-img {
-    height: 40px;
+    height: 45px;
     width: auto;
     object-fit: contain;
-}
-
-.nav-logo h2 {
-    padding: 15px 0;
-    font-size: 20px;
-    margin: 0;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
 .nav-toggle {
@@ -509,12 +509,31 @@ body {
     text-decoration: none;
     padding: 15px 20px;
     display: block;
-    transition: background-color 0.3s;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    margin: 5px 2px;
+    background: transparent;
+    position: relative;
 }
 
-.nav-link:hover,
+.nav-link:hover {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 
+        0 2px 10px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transform: translateY(-1px);
+}
+
 .nav-link.active {
-    background-color: var(--primary-medium);
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 
+        0 2px 10px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 /* ==================== CONTENIDO PRINCIPAL ==================== */
@@ -1072,7 +1091,11 @@ textarea.form-control {
         display: none;
         width: 100%;
         flex-direction: column;
-        background-color: var(--primary-medium);
+        background: rgba(13, 27, 42, 0.95);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     }
 
     .nav-menu.active {
@@ -1082,14 +1105,17 @@ textarea.form-control {
     .nav-link {
         padding: 15px;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        margin: 0;
+        border-radius: 0;
+    }
+
+    .nav-link:hover {
+        background: rgba(255, 255, 255, 0.15);
+        transform: translateX(5px);
     }
 
     .nav-logo-img {
-        height: 30px;
-    }
-
-    .nav-logo h2 {
-        font-size: 16px;
+        height: 35px;
     }
 
     .login-logo {
