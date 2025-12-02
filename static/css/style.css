@@ -492,7 +492,7 @@ body {
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    min-height: 60px;
+    height: 60px;
 }
 
 .nav-logo {
@@ -501,10 +501,11 @@ body {
     padding: 0;
     position: relative;
     height: 60px;
+    line-height: 60px;
 }
 
 .nav-logo-img {
-    height: 40px;
+    height: 45px;
     width: auto;
     object-fit: contain;
     filter: drop-shadow(0 0 15px rgba(100, 200, 255, 0.6));
@@ -512,6 +513,7 @@ body {
     position: relative;
     z-index: 1;
     display: block;
+    vertical-align: middle;
 }
 
 .nav-logo:hover .nav-logo-img {
@@ -540,28 +542,35 @@ body {
     display: flex;
     list-style: none;
     gap: 0;
+    align-items: center;
+    height: 60px;
+    margin: 0;
+    padding: 0;
 }
 
 .nav-menu li {
     margin: 0;
+    display: flex;
+    align-items: center;
+    height: 60px;
 }
 
 .nav-link {
     color: var(--white);
     text-decoration: none;
-    padding: 15px 20px;
+    padding: 0 20px;
     display: flex;
     align-items: center;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     border-radius: 12px;
-    margin: 5px 4px;
+    margin: 0 4px;
     background: transparent;
     position: relative;
     overflow: hidden;
     border: 1px solid transparent;
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
     height: 50px;
-    line-height: 1;
+    line-height: 50px;
 }
 
 .nav-link::before {
