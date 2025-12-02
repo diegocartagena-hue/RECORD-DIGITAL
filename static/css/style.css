@@ -444,7 +444,7 @@ body {
     backdrop-filter: blur(30px);
     -webkit-backdrop-filter: blur(30px);
     color: var(--white);
-    padding: 0;
+    padding: 10px 0 0 0;
     box-shadow: 
         0 8px 32px rgba(0, 0, 0, 0.4),
         0 0 0 1px rgba(255, 255, 255, 0.1),
@@ -487,7 +487,7 @@ body {
 .nav-container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 20px 10px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -579,7 +579,8 @@ body {
     min-width: fit-content;
 }
 
-.logout-icon {
+.logout-icon,
+.profile-icon {
     padding: 0 16px;
     width: 50px;
     min-width: 50px;
@@ -588,7 +589,8 @@ body {
     justify-content: center;
 }
 
-.logout-icon svg {
+.logout-icon svg,
+.profile-icon svg {
     width: 20px;
     height: 20px;
     stroke: currentColor;
@@ -597,6 +599,10 @@ body {
 
 #logoutBtn:hover svg {
     filter: drop-shadow(0 0 10px rgba(211, 47, 47, 0.8));
+}
+
+.profile-icon:hover svg {
+    filter: drop-shadow(0 0 10px rgba(100, 200, 255, 0.8));
 }
 
 .nav-link::before {
