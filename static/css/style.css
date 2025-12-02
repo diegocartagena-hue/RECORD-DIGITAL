@@ -546,6 +546,9 @@ body {
     height: 60px;
     margin: 0;
     padding: 0;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
 }
 
 .nav-menu li {
@@ -561,6 +564,7 @@ body {
     padding: 0 20px;
     display: flex;
     align-items: center;
+    justify-content: center;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     border-radius: 12px;
     margin: 0 4px;
@@ -571,6 +575,28 @@ body {
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
     height: 50px;
     line-height: 50px;
+    white-space: nowrap;
+    min-width: fit-content;
+}
+
+.logout-icon {
+    padding: 0 16px;
+    width: 50px;
+    min-width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logout-icon svg {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+}
+
+#logoutBtn:hover svg {
+    filter: drop-shadow(0 0 10px rgba(211, 47, 47, 0.8));
 }
 
 .nav-link::before {
