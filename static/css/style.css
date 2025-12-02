@@ -941,6 +941,12 @@ textarea.form-control {
     max-width: 400px;
 }
 
+.login-page .notifications {
+    top: 20px;
+    right: 20px;
+    z-index: 1002;
+}
+
 .notification {
     background: var(--white);
     padding: 15px 20px;
@@ -957,6 +963,11 @@ textarea.form-control {
 
 .notification.warning {
     border-left-color: var(--warning);
+}
+
+.notification.error {
+    border-left-color: var(--red);
+    background: rgba(255, 255, 255, 0.95);
 }
 
 @keyframes slideInRight {

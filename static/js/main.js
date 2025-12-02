@@ -24,7 +24,6 @@ async function handleLogin(e) {
     e.preventDefault();
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
-    const errorDiv = document.getElementById('loginError');
 
     try {
         const response = await fetch('/api/login', {
@@ -40,12 +39,10 @@ async function handleLogin(e) {
         if (data.success) {
             window.location.href = '/';
         } else {
-            errorDiv.textContent = data.error || 'Error al iniciar sesión';
-            errorDiv.classList.add('show');
+            showNotification(data.error || 'Credenciales inválidas', 'error');
         }
     } catch (error) {
-        errorDiv.textContent = 'Error de conexión. Intente nuevamente.';
-        errorDiv.classList.add('show');
+        showNotification('Error de conexión. Intente nuevamente.', 'error');
     }
 }
 
