@@ -1,0 +1,61 @@
+========================================
+  INICIO RÁPIDO - RECORD DIGITAL
+========================================
+
+1. INICIAR EL SERVIDOR:
+   
+   Opción A - Usando npm:
+   npm start
+   
+   Opción B - Directamente:
+   node server.js
+
+2. ACCEDER A LA APLICACIÓN:
+   
+   Abre tu navegador y ve a:
+   http://localhost:5000
+   
+   O también:
+   http://127.0.0.1:5000
+
+3. USUARIOS PARA PRUEBAS:
+   
+   ADMINISTRADOR:
+   Email: admin@interamericana.edu
+   Contraseña: admin123
+   
+   COORDINADOR:
+   Email: coord@interamericana.edu
+   Contraseña: coord123
+   
+   MAESTRO:
+   Email: maestro@interamericana.edu
+   Contraseña: maestro123
+
+4. FUNCIONALIDADES A PROBAR:
+   
+   Como ADMINISTRADOR:
+   - Ver dashboard con estadísticas
+   - Crear grados
+   - Agregar estudiantes (manual o importar Excel)
+   - Gestionar maestros y coordinadores
+   - Ver todas las anotaciones
+   - Exportar base de datos
+   
+   Como COORDINADOR:
+   - Ver dashboard
+   - Gestionar maestros
+   - Ver y resolver emergencias
+   - Ver anotaciones de todos los estudiantes
+   
+   Como MAESTRO:
+   - Ver dashboard
+   - Crear anotaciones
+   - Ver estudiantes de sus grados
+   - Solicitar asistencia de emergencia
+
+5. PARA DETENER EL SERVIDOR:
+   
+   Presiona Ctrl + C en la terminal
+
+========================================

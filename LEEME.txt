@@ -1,0 +1,46 @@
+========================================
+  SISTEMA DE REGISTRO DIGITAL
+  Escuela Interamericana
+========================================
+
+INICIO RAPIDO:
+==============
+
+1. PRIMERA VEZ (solo una vez):
+   - Ejecuta: INSTALAR_DEPENDENCIAS.bat
+   - Espera a que termine la instalacion
+
+2. INICIAR EL SERVIDOR:
+   - Ejecuta: INICIAR_SERVIDOR.bat
+   - Se abrira una ventana con el servidor
+   - NO CIERRES esta ventana mientras uses el sistema
+
+3. ACCEDER A LA APLICACION:
+   - Abre tu navegador
+   - Ve a: http://localhost:5000
+
+4. USUARIOS PARA PRUEBAS:
+   
+   ADMINISTRADOR:
+   Email: admin@interamericana.edu
+   Contraseña: admin123
+   
+   COORDINADOR:
+   Email: coord@interamericana.edu
+   Contraseña: coord123
+   
+   MAESTRO:
+   Email: maestro@interamericana.edu
+   Contraseña: maestro123
+
+5. PARA DETENER EL SERVIDOR:
+   - Presiona Ctrl+C en la ventana del servidor
+   - O simplemente cierra la ventana
+
+========================================
+NOTAS:
+- Asegurate de tener Node.js instalado
+- Si no tienes Node.js, descargalo de: https://nodejs.org/
+- El servidor debe estar corriendo para usar la aplicacion
+========================================
+
