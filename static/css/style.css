@@ -514,7 +514,7 @@ body {
     text-decoration: none;
     padding: 15px 20px;
     display: block;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     border-radius: 14px;
     margin: 4px 4px;
     position: relative;
@@ -538,36 +538,36 @@ body {
 
 .nav-link:hover,
 .nav-link.active {
-    background: rgba(255, 255, 255, 0.18);
-    backdrop-filter: blur(40px) saturate(180%);
-    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(50px) saturate(200%);
+    -webkit-backdrop-filter: blur(50px) saturate(200%);
     box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.12),
-        inset 0 1px 0 rgba(255, 255, 255, 0.4),
-        inset 0 -1px 0 rgba(255, 255, 255, 0.1);
-    border: 0.5px solid rgba(255, 255, 255, 0.25);
-    transform: translateY(-0.5px);
+        0 4px 20px rgba(0, 0, 0, 0.1),
+        inset 0 0.5px 0 rgba(255, 255, 255, 0.6),
+        inset 0 -0.5px 0 rgba(0, 0, 0, 0.05);
+    border: 0.5px solid rgba(255, 255, 255, 0.3);
+    transform: scale(0.98);
 }
 
 .nav-link.active {
-    background: rgba(255, 255, 255, 0.22);
+    background: rgba(255, 255, 255, 0.3);
     box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.15),
-        inset 0 1px 0 rgba(255, 255, 255, 0.5),
-        inset 0 -1px 0 rgba(255, 255, 255, 0.12);
-    border: 0.5px solid rgba(255, 255, 255, 0.3);
+        0 4px 20px rgba(0, 0, 0, 0.12),
+        inset 0 0.5px 0 rgba(255, 255, 255, 0.7),
+        inset 0 -0.5px 0 rgba(0, 0, 0, 0.08);
+    border: 0.5px solid rgba(255, 255, 255, 0.35);
 }
 
 #logoutBtn:hover {
-    background: rgba(239, 68, 68, 0.2);
-    backdrop-filter: blur(40px) saturate(180%);
-    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(50px) saturate(200%);
+    -webkit-backdrop-filter: blur(50px) saturate(200%);
     box-shadow: 
-        0 8px 32px rgba(239, 68, 68, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.4),
-        inset 0 -1px 0 rgba(255, 255, 255, 0.1);
-    border: 0.5px solid rgba(255, 255, 255, 0.25);
-    transform: translateY(-0.5px);
+        0 4px 20px rgba(239, 68, 68, 0.15),
+        inset 0 0.5px 0 rgba(255, 255, 255, 0.6),
+        inset 0 -0.5px 0 rgba(0, 0, 0, 0.05);
+    border: 0.5px solid rgba(255, 255, 255, 0.3);
+    transform: scale(0.98);
 }
 
 #logoutBtn:hover::before {
@@ -588,19 +588,19 @@ body {
 }
 
 .profile-icon:hover {
-    background: rgba(255, 255, 255, 0.18);
-    backdrop-filter: blur(40px) saturate(180%);
-    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(50px) saturate(200%);
+    -webkit-backdrop-filter: blur(50px) saturate(200%);
     box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.12),
-        inset 0 1px 0 rgba(255, 255, 255, 0.4),
-        inset 0 -1px 0 rgba(255, 255, 255, 0.1);
-    border: 0.5px solid rgba(255, 255, 255, 0.25);
-    transform: translateY(-0.5px);
+        0 4px 20px rgba(0, 0, 0, 0.1),
+        inset 0 0.5px 0 rgba(255, 255, 255, 0.6),
+        inset 0 -0.5px 0 rgba(0, 0, 0, 0.05);
+    border: 0.5px solid rgba(255, 255, 255, 0.3);
+    transform: scale(0.98);
 }
 
 .profile-icon:hover svg {
-    filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.3));
+    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.4));
 }
 
 
@@ -632,16 +632,16 @@ body {
     border-radius: 14px;
     font-size: 16px;
     cursor: pointer;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     font-weight: 500;
     position: relative;
     overflow: hidden;
     backdrop-filter: blur(40px) saturate(180%);
     -webkit-backdrop-filter: blur(40px) saturate(180%);
     box-shadow: 
-        0 4px 16px rgba(0, 0, 0, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.25),
-        inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+        0 2px 10px rgba(0, 0, 0, 0.08),
+        inset 0 0.5px 0 rgba(255, 255, 255, 0.3),
+        inset 0 -0.5px 0 rgba(0, 0, 0, 0.03);
 }
 
 .btn-primary {
@@ -651,15 +651,20 @@ body {
 }
 
 .btn-primary:hover {
-    background: rgba(255, 255, 255, 0.18);
-    backdrop-filter: blur(40px) saturate(180%);
-    -webkit-backdrop-filter: blur(40px) saturate(180%);
-    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(50px) saturate(200%);
+    -webkit-backdrop-filter: blur(50px) saturate(200%);
+    transform: scale(0.98);
     box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.12),
-        inset 0 1px 0 rgba(255, 255, 255, 0.4),
-        inset 0 -1px 0 rgba(255, 255, 255, 0.1);
-    border: 0.5px solid rgba(255, 255, 255, 0.25);
+        0 4px 20px rgba(0, 0, 0, 0.1),
+        inset 0 0.5px 0 rgba(255, 255, 255, 0.6),
+        inset 0 -0.5px 0 rgba(0, 0, 0, 0.05);
+    border: 0.5px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-primary:active {
+    transform: scale(0.96);
+    background: rgba(255, 255, 255, 0.3);
 }
 
 
@@ -670,15 +675,20 @@ body {
 }
 
 .btn-danger:hover {
-    background: rgba(255, 255, 255, 0.18);
-    backdrop-filter: blur(40px) saturate(180%);
-    -webkit-backdrop-filter: blur(40px) saturate(180%);
-    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(50px) saturate(200%);
+    -webkit-backdrop-filter: blur(50px) saturate(200%);
+    transform: scale(0.98);
     box-shadow: 
-        0 8px 32px rgba(239, 68, 68, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.4),
-        inset 0 -1px 0 rgba(255, 255, 255, 0.1);
-    border: 0.5px solid rgba(255, 255, 255, 0.25);
+        0 4px 20px rgba(239, 68, 68, 0.15),
+        inset 0 0.5px 0 rgba(255, 255, 255, 0.6),
+        inset 0 -0.5px 0 rgba(0, 0, 0, 0.05);
+    border: 0.5px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-danger:active {
+    transform: scale(0.96);
+    background: rgba(255, 255, 255, 0.3);
 }
 
 
@@ -689,15 +699,20 @@ body {
 }
 
 .btn-success:hover {
-    background: rgba(255, 255, 255, 0.18);
-    backdrop-filter: blur(40px) saturate(180%);
-    -webkit-backdrop-filter: blur(40px) saturate(180%);
-    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(50px) saturate(200%);
+    -webkit-backdrop-filter: blur(50px) saturate(200%);
+    transform: scale(0.98);
     box-shadow: 
-        0 8px 32px rgba(34, 197, 94, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.4),
-        inset 0 -1px 0 rgba(255, 255, 255, 0.1);
-    border: 0.5px solid rgba(255, 255, 255, 0.25);
+        0 4px 20px rgba(34, 197, 94, 0.15),
+        inset 0 0.5px 0 rgba(255, 255, 255, 0.6),
+        inset 0 -0.5px 0 rgba(0, 0, 0, 0.05);
+    border: 0.5px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-success:active {
+    transform: scale(0.96);
+    background: rgba(255, 255, 255, 0.3);
 }
 
 .btn-success::before {
@@ -750,29 +765,34 @@ body {
 }
 
 .btn-emergency:hover {
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(40px) saturate(180%);
-    -webkit-backdrop-filter: blur(40px) saturate(180%);
-    transform: scale(1.05);
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(50px) saturate(200%);
+    -webkit-backdrop-filter: blur(50px) saturate(200%);
+    transform: scale(0.98);
     box-shadow: 
-        0 12px 40px rgba(239, 68, 68, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.4),
-        inset 0 -1px 0 rgba(255, 255, 255, 0.12);
+        0 4px 20px rgba(239, 68, 68, 0.2),
+        inset 0 0.5px 0 rgba(255, 255, 255, 0.6),
+        inset 0 -0.5px 0 rgba(0, 0, 0, 0.05);
     border: 0.5px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-emergency:active {
+    transform: scale(0.96);
+    background: rgba(255, 255, 255, 0.3);
 }
 
 @keyframes pulse {
     0%, 100% {
         box-shadow: 
-            0 8px 32px rgba(239, 68, 68, 0.3),
-            inset 0 1px 0 rgba(255, 255, 255, 0.3),
-            inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+            0 4px 20px rgba(239, 68, 68, 0.25),
+            inset 0 0.5px 0 rgba(255, 255, 255, 0.5),
+            inset 0 -0.5px 0 rgba(0, 0, 0, 0.05);
     }
     50% {
         box-shadow: 
-            0 12px 40px rgba(239, 68, 68, 0.5),
-            inset 0 1px 0 rgba(255, 255, 255, 0.4),
-            inset 0 -1px 0 rgba(255, 255, 255, 0.12);
+            0 6px 25px rgba(239, 68, 68, 0.35),
+            inset 0 0.5px 0 rgba(255, 255, 255, 0.6),
+            inset 0 -0.5px 0 rgba(0, 0, 0, 0.08);
     }
 }
 
@@ -1262,28 +1282,28 @@ textarea.form-control {
     }
 
     .nav-link:hover {
-        background: rgba(255, 255, 255, 0.18);
-        backdrop-filter: blur(40px) saturate(180%);
-        -webkit-backdrop-filter: blur(40px) saturate(180%);
-        transform: translateX(4px);
+        background: rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(50px) saturate(200%);
+        -webkit-backdrop-filter: blur(50px) saturate(200%);
+        transform: translateX(4px) scale(0.98);
         box-shadow: 
-            0 8px 32px rgba(0, 0, 0, 0.12),
-            inset 0 1px 0 rgba(255, 255, 255, 0.4),
-            inset 0 -1px 0 rgba(255, 255, 255, 0.1);
-        border: 0.5px solid rgba(255, 255, 255, 0.25);
+            0 4px 20px rgba(0, 0, 0, 0.1),
+            inset 0 0.5px 0 rgba(255, 255, 255, 0.6),
+            inset 0 -0.5px 0 rgba(0, 0, 0, 0.05);
+        border: 0.5px solid rgba(255, 255, 255, 0.3);
     }
 
     .nav-link.active {
-        background: rgba(255, 255, 255, 0.22);
-        backdrop-filter: blur(40px) saturate(180%);
-        -webkit-backdrop-filter: blur(40px) saturate(180%);
-        border-left: 3px solid rgba(255, 255, 255, 0.35);
+        background: rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(50px) saturate(200%);
+        -webkit-backdrop-filter: blur(50px) saturate(200%);
+        border-left: 3px solid rgba(255, 255, 255, 0.4);
         box-shadow: 
-            0 8px 32px rgba(0, 0, 0, 0.15),
-            inset 0 1px 0 rgba(255, 255, 255, 0.5),
-            inset 0 -1px 0 rgba(255, 255, 255, 0.12);
-        border: 0.5px solid rgba(255, 255, 255, 0.3);
-        border-left: 3px solid rgba(255, 255, 255, 0.35);
+            0 4px 20px rgba(0, 0, 0, 0.12),
+            inset 0 0.5px 0 rgba(255, 255, 255, 0.7),
+            inset 0 -0.5px 0 rgba(0, 0, 0, 0.08);
+        border: 0.5px solid rgba(255, 255, 255, 0.35);
+        border-left: 3px solid rgba(255, 255, 255, 0.4);
     }
 
     .nav-logo-img {
