@@ -34,6 +34,33 @@
     --shadow-color: rgba(0, 0, 0, 0.5);
 }
 
+/* Estilos para modo oscuro - Form controls */
+[data-theme="dark"] .form-control {
+    background: rgba(45, 45, 45, 0.6);
+    border: 0.5px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .form-control:focus {
+    background: rgba(45, 45, 45, 0.8);
+}
+
+[data-theme="dark"] select.form-control {
+    background: rgba(45, 45, 45, 0.6) !important;
+}
+
+[data-theme="dark"] select.form-control:hover {
+    background: rgba(45, 45, 45, 0.7) !important;
+}
+
+[data-theme="dark"] select.form-control:focus {
+    background: rgba(45, 45, 45, 0.8) !important;
+}
+
+[data-theme="dark"] .login-box {
+    background: rgba(45, 45, 45, 0.9);
+    border: 0.5px solid rgba(255, 255, 255, 0.1);
+}
+
 /* Reset y estilos base */
 * {
     margin: 0;
@@ -56,19 +83,118 @@ body {
     align-items: center;
     min-height: 100vh;
     background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Animación de fondo */
+.animated-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.shape {
+    position: absolute;
+    opacity: 0.1;
+    animation: float 20s infinite ease-in-out;
+}
+
+.shape-circle-1 {
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.3), transparent);
+    border-radius: 50%;
+    top: 10%;
+    left: 10%;
+    animation-delay: 0s;
+}
+
+.shape-circle-2 {
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.2), transparent);
+    border-radius: 50%;
+    top: 60%;
+    right: 15%;
+    animation-delay: 5s;
+}
+
+.shape-circle-3 {
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.25), transparent);
+    border-radius: 50%;
+    bottom: 10%;
+    left: 20%;
+    animation-delay: 10s;
+}
+
+.shape-triangle-1 {
+    width: 0;
+    height: 0;
+    border-left: 100px solid transparent;
+    border-right: 100px solid transparent;
+    border-bottom: 150px solid rgba(255, 255, 255, 0.1);
+    top: 20%;
+    right: 20%;
+    animation-delay: 2s;
+}
+
+.shape-triangle-2 {
+    width: 0;
+    height: 0;
+    border-left: 80px solid transparent;
+    border-right: 80px solid transparent;
+    border-bottom: 120px solid rgba(255, 255, 255, 0.08);
+    bottom: 20%;
+    right: 30%;
+    animation-delay: 8s;
+}
+
+.shape-triangle-3 {
+    width: 0;
+    height: 0;
+    border-left: 120px solid transparent;
+    border-right: 120px solid transparent;
+    border-bottom: 180px solid rgba(255, 255, 255, 0.12);
+    top: 50%;
+    left: 5%;
+    animation-delay: 15s;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+    33% {
+        transform: translate(30px, -30px) rotate(120deg);
+    }
+    66% {
+        transform: translate(-20px, 20px) rotate(240deg);
+    }
 }
 
 .login-container {
     width: 100%;
     max-width: 400px;
     padding: 20px;
+    position: relative;
+    z-index: 1;
 }
 
 .login-box {
-    background: var(--white);
-    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(30px) saturate(180%);
+    border-radius: 20px;
     padding: 40px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3),
+                0 0 0 0.5px rgba(255, 255, 255, 0.5) inset;
+    border: 0.5px solid rgba(255, 255, 255, 0.3);
 }
 
 .login-header {
@@ -111,24 +237,35 @@ body {
 
 .login-form input {
     width: 100%;
-    padding: 12px;
-    border: 2px solid var(--gray-medium);
-    border-radius: 5px;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(20px) saturate(180%);
+    border: 0.5px solid rgba(158, 158, 158, 0.2);
+    border-radius: 14px;
     font-size: 16px;
-    transition: border-color 0.3s;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05),
+                inset 0 0.5px 0 rgba(255, 255, 255, 0.6);
 }
 
 .login-form input:focus {
     outline: none;
+    background: rgba(255, 255, 255, 0.8);
     border-color: var(--primary-dark);
+    box-shadow: 0 4px 20px rgba(30, 58, 138, 0.2),
+                inset 0 0.5px 0 rgba(255, 255, 255, 0.8);
+    transform: scale(1.02);
 }
 
 /* ==================== NAVEGACIÓN ==================== */
 .navbar {
-    background-color: var(--primary-dark);
+    background: rgba(30, 58, 138, 0.8);
+    backdrop-filter: blur(50px) saturate(200%);
     color: var(--white);
     padding: 0;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1),
+                0 0 0 0.5px rgba(255, 255, 255, 0.1) inset;
+    border-bottom: 0.5px solid rgba(255, 255, 255, 0.1);
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -181,12 +318,29 @@ body {
     text-decoration: none;
     padding: 15px 20px;
     display: block;
-    transition: background-color 0.3s;
+    transition: all 0.3s ease;
+    border-radius: 12px;
+    margin: 5px;
 }
 
-.nav-link:hover,
+.nav-link:hover {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(50px) saturate(200%);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1),
+                inset 0 0.5px 0 rgba(255, 255, 255, 0.6),
+                inset 0 -0.5px 0 rgba(0, 0, 0, 0.05);
+    border: 0.5px solid rgba(255, 255, 255, 0.3);
+    transform: scale(0.98);
+}
+
 .nav-link.active {
-    background-color: var(--primary-medium);
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(50px) saturate(200%);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1),
+                inset 0 0.5px 0 rgba(255, 255, 255, 0.6),
+                inset 0 -0.5px 0 rgba(0, 0, 0, 0.05);
+    border: 0.5px solid rgba(255, 255, 255, 0.3);
+    transform: scale(0.96);
 }
 
 /* ==================== CONTENIDO PRINCIPAL ==================== */
@@ -218,36 +372,72 @@ body {
 .btn {
     padding: 12px 24px;
     border: none;
-    border-radius: 5px;
+    border-radius: 14px;
     font-size: 16px;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.3s ease;
     font-weight: 500;
+    backdrop-filter: blur(20px) saturate(180%);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1),
+                inset 0 0.5px 0 rgba(255, 255, 255, 0.3);
+    border: 0.5px solid rgba(255, 255, 255, 0.2);
 }
 
 .btn-primary {
-    background-color: var(--primary-dark);
+    background: rgba(30, 58, 138, 0.7);
     color: var(--white);
 }
 
 .btn-primary:hover {
-    background-color: var(--primary-medium);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background: rgba(30, 58, 138, 0.85);
+    backdrop-filter: blur(50px) saturate(200%);
+    transform: scale(0.98);
+    box-shadow: 0 6px 25px rgba(30, 58, 138, 0.3),
+                inset 0 0.5px 0 rgba(255, 255, 255, 0.4),
+                inset 0 -0.5px 0 rgba(0, 0, 0, 0.1);
+    border: 0.5px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-primary:active {
+    transform: scale(0.96);
 }
 
 .btn-danger {
-    background-color: var(--red);
+    background: rgba(211, 47, 47, 0.7);
     color: var(--white);
 }
 
 .btn-danger:hover {
-    background-color: var(--red-dark);
+    background: rgba(211, 47, 47, 0.85);
+    backdrop-filter: blur(50px) saturate(200%);
+    transform: scale(0.98);
+    box-shadow: 0 6px 25px rgba(211, 47, 47, 0.3),
+                inset 0 0.5px 0 rgba(255, 255, 255, 0.4),
+                inset 0 -0.5px 0 rgba(0, 0, 0, 0.1);
+    border: 0.5px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-danger:active {
+    transform: scale(0.96);
 }
 
 .btn-success {
-    background-color: var(--success);
+    background: rgba(76, 175, 80, 0.7);
     color: var(--white);
+}
+
+.btn-success:hover {
+    background: rgba(76, 175, 80, 0.85);
+    backdrop-filter: blur(50px) saturate(200%);
+    transform: scale(0.98);
+    box-shadow: 0 6px 25px rgba(76, 175, 80, 0.3),
+                inset 0 0.5px 0 rgba(255, 255, 255, 0.4),
+                inset 0 -0.5px 0 rgba(0, 0, 0, 0.1);
+    border: 0.5px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-success:active {
+    transform: scale(0.96);
 }
 
 /* ==================== BOTÓN DE EMERGENCIA ==================== */
@@ -259,21 +449,27 @@ body {
 }
 
 .btn-emergency {
-    background-color: var(--red);
+    background: rgba(211, 47, 47, 0.8);
+    backdrop-filter: blur(20px) saturate(180%);
     color: var(--white);
-    border: none;
+    border: 0.5px solid rgba(255, 255, 255, 0.2);
     border-radius: 50px;
     padding: 20px 30px;
     font-size: 18px;
     font-weight: bold;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(211, 47, 47, 0.4);
+    box-shadow: 0 4px 15px rgba(211, 47, 47, 0.4),
+                inset 0 0.5px 0 rgba(255, 255, 255, 0.3);
     animation: pulse 2s infinite;
 }
 
 .btn-emergency:hover {
-    background-color: var(--red-dark);
+    background: rgba(211, 47, 47, 0.9);
+    backdrop-filter: blur(50px) saturate(200%);
     transform: scale(1.05);
+    box-shadow: 0 6px 25px rgba(211, 47, 47, 0.5),
+                inset 0 0.5px 0 rgba(255, 255, 255, 0.4);
+    border: 0.5px solid rgba(255, 255, 255, 0.3);
 }
 
 @keyframes pulse {
@@ -342,13 +538,16 @@ body {
 
 .form-control {
     width: 100%;
-    padding: 12px;
-    background: var(--card-bg);
-    border: 2px solid var(--border-color);
-    border-radius: 5px;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(20px) saturate(180%);
+    border: 0.5px solid rgba(158, 158, 158, 0.2);
+    border-radius: 14px;
     font-size: 16px;
     color: var(--text-primary);
     transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05),
+                inset 0 0.5px 0 rgba(255, 255, 255, 0.6);
 }
 
 .form-control::placeholder {
@@ -357,7 +556,11 @@ body {
 
 .form-control:focus {
     outline: none;
+    background: rgba(255, 255, 255, 0.8);
     border-color: var(--primary-dark);
+    box-shadow: 0 4px 20px rgba(30, 58, 138, 0.2),
+                inset 0 0.5px 0 rgba(255, 255, 255, 0.8);
+    transform: scale(1.02);
 }
 
 .form-row {
@@ -373,33 +576,34 @@ textarea.form-control {
 
 /* Estilos específicos para select */
 select.form-control {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    background: var(--card-bg);
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23424242' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 16px center;
-    background-size: 12px 12px;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    background: rgba(255, 255, 255, 0.6) !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23424242' d='M6 9L1 4h10z'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 16px center !important;
+    background-size: 12px 12px !important;
     padding-right: 40px;
     cursor: pointer;
     color: var(--text-primary);
+    backdrop-filter: blur(20px) saturate(180%);
 }
 
 select.form-control:hover {
-    background: var(--bg-secondary);
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23424242' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 16px center;
-    background-size: 12px 12px;
+    background: rgba(255, 255, 255, 0.7) !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23424242' d='M6 9L1 4h10z'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 16px center !important;
+    background-size: 12px 12px !important;
 }
 
 select.form-control:focus {
-    background: var(--bg-secondary);
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%231e3a8a' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 16px center;
-    background-size: 12px 12px;
+    background: rgba(255, 255, 255, 0.8) !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%231e3a8a' d='M6 9L1 4h10z'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 16px center !important;
+    background-size: 12px 12px !important;
 }
 
 [data-theme="dark"] select.form-control {
