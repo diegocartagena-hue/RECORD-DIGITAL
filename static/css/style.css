@@ -23,11 +23,25 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 50%, #f0f0f0 100%);
+    background: linear-gradient(135deg, #e3e7eb 0%, #d1d5db 25%, #e5e7eb 50%, #d1d5db 75%, #e3e7eb 100%);
+    background-size: 400% 400%;
     background-attachment: fixed;
+    animation: gradientShift 15s ease infinite;
     color: var(--gray-dark);
     line-height: 1.6;
     min-height: 100vh;
+}
+
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 /* ==================== PÁGINA DE LOGIN ==================== */
@@ -442,15 +456,15 @@ body {
 
 /* ==================== NAVEGACIÓN ==================== */
 .navbar {
-    background: rgba(13, 27, 42, 0.75);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: rgba(13, 27, 42, 0.4);
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
     color: var(--white);
     padding: 0;
     box-shadow: 
-        0 8px 32px 0 rgba(0, 0, 0, 0.15),
-        inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        0 8px 32px 0 rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -516,7 +530,10 @@ body {
     text-decoration: none;
     padding: 15px 20px;
     display: block;
-    transition: background-color 0.3s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 10px;
+    margin: 4px 4px;
+    position: relative;
 }
 
 .logout-icon,
@@ -537,25 +554,36 @@ body {
 
 .nav-link:hover,
 .nav-link.active {
-    background: rgba(27, 38, 59, 0.6);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-radius: 8px;
-    margin: 4px 8px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
     box-shadow: 
-        0 4px 12px rgba(0, 0, 0, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        0 4px 16px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+}
+
+.nav-link.active {
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 
+        0 6px 20px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.25);
 }
 
 #logoutBtn:hover {
-    background: rgba(211, 47, 47, 0.8);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-radius: 8px;
-    margin: 4px 8px;
+    background: rgba(211, 47, 47, 0.25);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
     box-shadow: 
-        0 4px 12px rgba(211, 47, 47, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        0 4px 16px rgba(211, 47, 47, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
 }
 
 #logoutBtn:hover::before {
@@ -573,6 +601,18 @@ body {
 
 #logoutBtn:hover svg {
     filter: drop-shadow(0 0 8px rgba(211, 47, 47, 0.8));
+}
+
+.profile-icon:hover {
+    background: rgba(100, 200, 255, 0.15);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    box-shadow: 
+        0 4px 16px rgba(100, 200, 255, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
 }
 
 .profile-icon:hover svg {
@@ -604,25 +644,26 @@ body {
 /* ==================== BOTONES ==================== */
 .btn {
     padding: 12px 24px;
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.25);
     border-radius: 12px;
     font-size: 16px;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     font-weight: 500;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
     box-shadow: 
         0 4px 15px rgba(0, 0, 0, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.1);
     position: relative;
     overflow: hidden;
 }
 
 .btn-primary {
-    background: rgba(13, 27, 42, 0.7);
+    background: rgba(13, 27, 42, 0.5);
     color: var(--white);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.25);
 }
 
 .btn-primary::before {
@@ -642,12 +683,13 @@ body {
 }
 
 .btn-primary:hover {
-    background: rgba(27, 38, 59, 0.85);
+    background: rgba(13, 27, 42, 0.65);
     transform: translateY(-2px);
     box-shadow: 
-        0 8px 25px rgba(13, 27, 42, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3);
-    border-color: rgba(255, 255, 255, 0.3);
+        0 8px 25px rgba(13, 27, 42, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.35);
 }
 
 .btn-primary:hover::before {
@@ -662,9 +704,9 @@ body {
 }
 
 .btn-danger {
-    background: rgba(211, 47, 47, 0.7);
+    background: rgba(211, 47, 47, 0.5);
     color: var(--white);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.25);
 }
 
 .btn-danger::before {
@@ -684,12 +726,13 @@ body {
 }
 
 .btn-danger:hover {
-    background: rgba(183, 28, 28, 0.85);
+    background: rgba(211, 47, 47, 0.65);
     transform: translateY(-2px);
     box-shadow: 
-        0 8px 25px rgba(211, 47, 47, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3);
-    border-color: rgba(255, 255, 255, 0.3);
+        0 8px 25px rgba(211, 47, 47, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.35);
 }
 
 .btn-danger:hover::before {
@@ -704,9 +747,9 @@ body {
 }
 
 .btn-success {
-    background: rgba(76, 175, 80, 0.7);
+    background: rgba(76, 175, 80, 0.5);
     color: var(--white);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.25);
 }
 
 .btn-success::before {
@@ -726,12 +769,13 @@ body {
 }
 
 .btn-success:hover {
-    background: rgba(76, 175, 80, 0.85);
+    background: rgba(76, 175, 80, 0.65);
     transform: translateY(-2px);
     box-shadow: 
-        0 8px 25px rgba(76, 175, 80, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3);
-    border-color: rgba(255, 255, 255, 0.3);
+        0 8px 25px rgba(76, 175, 80, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.35);
 }
 
 .btn-success:hover::before {
@@ -754,30 +798,32 @@ body {
 }
 
 .btn-emergency {
-    background: rgba(211, 47, 47, 0.8);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: rgba(211, 47, 47, 0.6);
+    backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
     color: var(--white);
-    border: 1px solid rgba(255, 255, 255, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 50px;
     padding: 20px 30px;
     font-size: 18px;
     font-weight: bold;
     cursor: pointer;
     box-shadow: 
-        0 8px 32px rgba(211, 47, 47, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        0 8px 32px rgba(211, 47, 47, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.15);
     animation: pulse 2s infinite;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .btn-emergency:hover {
-    background: rgba(183, 28, 28, 0.9);
+    background: rgba(211, 47, 47, 0.75);
     transform: scale(1.05);
     box-shadow: 
-        0 12px 40px rgba(211, 47, 47, 0.5),
-        inset 0 1px 0 rgba(255, 255, 255, 0.4);
-    border-color: rgba(255, 255, 255, 0.35);
+        0 12px 40px rgba(211, 47, 47, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
 }
 
 @keyframes pulse {
@@ -1322,13 +1368,13 @@ textarea.form-control {
         display: none;
         width: 100%;
         flex-direction: column;
-        background: rgba(13, 27, 42, 0.85);
-        backdrop-filter: blur(30px);
-        -webkit-backdrop-filter: blur(30px);
-        border-top: 1px solid rgba(255, 255, 255, 0.15);
+        background: rgba(13, 27, 42, 0.5);
+        backdrop-filter: blur(40px) saturate(180%);
+        -webkit-backdrop-filter: blur(40px) saturate(180%);
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
         box-shadow: 
-            0 8px 32px rgba(0, 0, 0, 0.3),
-            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            0 8px 32px rgba(0, 0, 0, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
     }
 
     .nav-menu.active {
@@ -1344,27 +1390,28 @@ textarea.form-control {
     }
 
     .nav-link:hover {
-        background: rgba(27, 38, 59, 0.6);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
         transform: translateX(4px);
-        border-radius: 8px;
-        margin: 4px 8px;
         box-shadow: 
-            0 4px 12px rgba(0, 0, 0, 0.1),
-            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            0 4px 16px rgba(0, 0, 0, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.3),
+            inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
     .nav-link.active {
-        background: rgba(65, 90, 119, 0.5);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
         border-left: 3px solid rgba(255, 255, 255, 0.4);
-        border-radius: 8px;
-        margin: 4px 8px;
         box-shadow: 
-            0 4px 12px rgba(0, 0, 0, 0.15),
-            inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            0 6px 20px rgba(0, 0, 0, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 0.4),
+            inset 0 -1px 0 rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-left: 3px solid rgba(255, 255, 255, 0.4);
     }
 
     .nav-logo-img {
