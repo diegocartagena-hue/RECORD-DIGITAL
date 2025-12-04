@@ -127,6 +127,9 @@ function initDashboard() {
     // Cargar datos del usuario
     loadUserData();
     
+    // Cargar dashboard inicial
+    loadDashboard();
+    
     // Inicializar logout
     const logoutBtn = document.getElementById('logoutBtn');
     if (logoutBtn) {

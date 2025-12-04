@@ -74,6 +74,14 @@ body {
     color: var(--text-primary);
     line-height: 1.6;
     transition: background-color 0.3s ease, color 0.3s ease;
+    margin: 0;
+    padding: 0;
+}
+
+/* Asegurar que el body no tenga fondo azul a menos que sea login-page */
+body:not(.login-page) {
+    background-color: var(--bg-primary) !important;
+    background-image: none !important;
 }
 
 /* ==================== PÁGINA DE LOGIN ==================== */
@@ -348,9 +356,13 @@ body {
     max-width: 1400px;
     margin: 0 auto;
     padding: 30px 20px;
+    padding-top: 30px;
     background-color: var(--bg-primary);
     min-height: calc(100vh - 60px);
     transition: background-color 0.3s ease;
+    position: relative;
+    z-index: 1;
+    color: var(--text-primary);
 }
 
 .page {
@@ -359,6 +371,18 @@ body {
 
 .page.active {
     display: block;
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .page h1 {
