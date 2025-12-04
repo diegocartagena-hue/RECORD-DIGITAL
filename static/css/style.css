@@ -23,25 +23,11 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #a8d5e2 0%, #b8e0d2 25%, #d4a5d9 50%, #f4c2c2 75%, #ffe5b4 100%);
-    background-size: 400% 400%;
+    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #2563eb 100%);
     background-attachment: fixed;
-    animation: gradientShift 20s ease infinite;
     color: var(--gray-dark);
     line-height: 1.6;
     min-height: 100vh;
-}
-
-@keyframes gradientShift {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
 }
 
 /* ==================== PÁGINA DE LOGIN ==================== */
@@ -456,15 +442,15 @@ body {
 
 /* ==================== NAVEGACIÓN ==================== */
 .navbar {
-    background: rgba(65, 105, 225, 0.35);
-    backdrop-filter: blur(40px) saturate(180%);
-    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    background: rgba(30, 58, 138, 0.8);
+    backdrop-filter: blur(50px) saturate(200%);
+    -webkit-backdrop-filter: blur(50px) saturate(200%);
     color: var(--white);
     padding: 0;
     box-shadow: 
-        0 8px 32px 0 rgba(65, 105, 225, 0.2),
-        inset 0 1px 0 0 rgba(255, 255, 255, 0.3);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+        0 8px 32px 0 rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -531,7 +517,7 @@ body {
     padding: 15px 20px;
     display: block;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border-radius: 10px;
+    border-radius: 12px;
     margin: 4px 4px;
     position: relative;
 }
@@ -554,35 +540,35 @@ body {
 
 .nav-link:hover,
 .nav-link.active {
-    background: rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(30px) saturate(200%);
+    -webkit-backdrop-filter: blur(30px) saturate(200%);
     box-shadow: 
-        0 4px 16px rgba(100, 149, 237, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.5),
-        inset 0 -1px 0 rgba(255, 255, 255, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.35);
+        0 8px 32px rgba(0, 0, 0, 0.2),
+        inset 0 1px 1px rgba(255, 255, 255, 0.4),
+        inset 0 -1px 1px rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     transform: translateY(-1px);
 }
 
 .nav-link.active {
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.25);
     box-shadow: 
-        0 6px 20px rgba(100, 149, 237, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.6),
-        inset 0 -1px 0 rgba(255, 255, 255, 0.25);
-    border: 1px solid rgba(255, 255, 255, 0.4);
+        0 8px 32px rgba(0, 0, 0, 0.25),
+        inset 0 1px 1px rgba(255, 255, 255, 0.5),
+        inset 0 -1px 1px rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.35);
 }
 
 #logoutBtn:hover {
-    background: rgba(255, 107, 107, 0.3);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    background: rgba(239, 68, 68, 0.25);
+    backdrop-filter: blur(30px) saturate(200%);
+    -webkit-backdrop-filter: blur(30px) saturate(200%);
     box-shadow: 
-        0 4px 16px rgba(255, 107, 107, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.5),
-        inset 0 -1px 0 rgba(255, 255, 255, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.35);
+        0 8px 32px rgba(239, 68, 68, 0.3),
+        inset 0 1px 1px rgba(255, 255, 255, 0.4),
+        inset 0 -1px 1px rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     transform: translateY(-1px);
 }
 
@@ -604,19 +590,19 @@ body {
 }
 
 .profile-icon:hover {
-    background: rgba(144, 238, 144, 0.3);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(30px) saturate(200%);
+    -webkit-backdrop-filter: blur(30px) saturate(200%);
     box-shadow: 
-        0 4px 16px rgba(144, 238, 144, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.5),
-        inset 0 -1px 0 rgba(255, 255, 255, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.35);
+        0 8px 32px rgba(0, 0, 0, 0.2),
+        inset 0 1px 1px rgba(255, 255, 255, 0.4),
+        inset 0 -1px 1px rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     transform: translateY(-1px);
 }
 
 .profile-icon:hover svg {
-    filter: drop-shadow(0 0 8px rgba(144, 238, 144, 0.8));
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
 }
 
 
@@ -644,26 +630,26 @@ body {
 /* ==================== BOTONES ==================== */
 .btn {
     padding: 12px 24px;
-    border: 1px solid rgba(255, 255, 255, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 12px;
     font-size: 16px;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     font-weight: 500;
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(200%);
+    -webkit-backdrop-filter: blur(20px) saturate(200%);
     box-shadow: 
         0 4px 15px rgba(0, 0, 0, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3),
-        inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+        inset 0 1px 1px rgba(255, 255, 255, 0.3),
+        inset 0 -1px 1px rgba(255, 255, 255, 0.1);
     position: relative;
     overflow: hidden;
 }
 
 .btn-primary {
-    background: rgba(65, 105, 225, 0.5);
+    background: rgba(30, 58, 138, 0.6);
     color: var(--white);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.25);
 }
 
 .btn-primary::before {
@@ -683,13 +669,15 @@ body {
 }
 
 .btn-primary:hover {
-    background: rgba(100, 149, 237, 0.65);
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(30px) saturate(200%);
+    -webkit-backdrop-filter: blur(30px) saturate(200%);
     transform: translateY(-2px);
     box-shadow: 
-        0 8px 25px rgba(100, 149, 237, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.5),
-        inset 0 -1px 0 rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.4);
+        0 8px 32px rgba(0, 0, 0, 0.2),
+        inset 0 1px 1px rgba(255, 255, 255, 0.5),
+        inset 0 -1px 1px rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.35);
 }
 
 .btn-primary:hover::before {
@@ -704,9 +692,9 @@ body {
 }
 
 .btn-danger {
-    background: rgba(255, 107, 107, 0.5);
+    background: rgba(239, 68, 68, 0.6);
     color: var(--white);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.25);
 }
 
 .btn-danger::before {
@@ -726,13 +714,15 @@ body {
 }
 
 .btn-danger:hover {
-    background: rgba(255, 140, 140, 0.65);
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(30px) saturate(200%);
+    -webkit-backdrop-filter: blur(30px) saturate(200%);
     transform: translateY(-2px);
     box-shadow: 
-        0 8px 25px rgba(255, 107, 107, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.5),
-        inset 0 -1px 0 rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.4);
+        0 8px 32px rgba(239, 68, 68, 0.3),
+        inset 0 1px 1px rgba(255, 255, 255, 0.5),
+        inset 0 -1px 1px rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.35);
 }
 
 .btn-danger:hover::before {
@@ -747,9 +737,9 @@ body {
 }
 
 .btn-success {
-    background: rgba(76, 217, 100, 0.5);
+    background: rgba(34, 197, 94, 0.6);
     color: var(--white);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.25);
 }
 
 .btn-success::before {
@@ -769,13 +759,15 @@ body {
 }
 
 .btn-success:hover {
-    background: rgba(100, 230, 120, 0.65);
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(30px) saturate(200%);
+    -webkit-backdrop-filter: blur(30px) saturate(200%);
     transform: translateY(-2px);
     box-shadow: 
-        0 8px 25px rgba(76, 217, 100, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.5),
-        inset 0 -1px 0 rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.4);
+        0 8px 32px rgba(34, 197, 94, 0.3),
+        inset 0 1px 1px rgba(255, 255, 255, 0.5),
+        inset 0 -1px 1px rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.35);
 }
 
 .btn-success:hover::before {
@@ -798,46 +790,48 @@ body {
 }
 
 .btn-emergency {
-    background: rgba(255, 107, 107, 0.65);
-    backdrop-filter: blur(30px) saturate(180%);
-    -webkit-backdrop-filter: blur(30px) saturate(180%);
+    background: rgba(239, 68, 68, 0.7);
+    backdrop-filter: blur(30px) saturate(200%);
+    -webkit-backdrop-filter: blur(30px) saturate(200%);
     color: var(--white);
-    border: 1px solid rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 50px;
     padding: 20px 30px;
     font-size: 18px;
     font-weight: bold;
     cursor: pointer;
     box-shadow: 
-        0 8px 32px rgba(255, 107, 107, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.5),
-        inset 0 -1px 0 rgba(255, 255, 255, 0.2);
+        0 8px 32px rgba(239, 68, 68, 0.4),
+        inset 0 1px 1px rgba(255, 255, 255, 0.5),
+        inset 0 -1px 1px rgba(255, 255, 255, 0.2);
     animation: pulse 2s infinite;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .btn-emergency:hover {
-    background: rgba(255, 140, 140, 0.8);
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(40px) saturate(200%);
+    -webkit-backdrop-filter: blur(40px) saturate(200%);
     transform: scale(1.05);
     box-shadow: 
-        0 12px 40px rgba(255, 107, 107, 0.5),
-        inset 0 1px 0 rgba(255, 255, 255, 0.6),
-        inset 0 -1px 0 rgba(255, 255, 255, 0.25);
-    border-color: rgba(255, 255, 255, 0.5);
+        0 12px 40px rgba(239, 68, 68, 0.5),
+        inset 0 1px 1px rgba(255, 255, 255, 0.6),
+        inset 0 -1px 1px rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.4);
 }
 
 @keyframes pulse {
     0%, 100% {
         box-shadow: 
-            0 8px 32px rgba(255, 107, 107, 0.4),
-            inset 0 1px 0 rgba(255, 255, 255, 0.5),
-            inset 0 -1px 0 rgba(255, 255, 255, 0.2);
+            0 8px 32px rgba(239, 68, 68, 0.4),
+            inset 0 1px 1px rgba(255, 255, 255, 0.5),
+            inset 0 -1px 1px rgba(255, 255, 255, 0.2);
     }
     50% {
         box-shadow: 
-            0 12px 40px rgba(255, 107, 107, 0.6),
-            inset 0 1px 0 rgba(255, 255, 255, 0.6),
-            inset 0 -1px 0 rgba(255, 255, 255, 0.25);
+            0 12px 40px rgba(239, 68, 68, 0.6),
+            inset 0 1px 1px rgba(255, 255, 255, 0.6),
+            inset 0 -1px 1px rgba(255, 255, 255, 0.25);
     }
 }
 
@@ -850,14 +844,15 @@ body {
 }
 
 .stat-card {
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(20px) saturate(200%);
+    -webkit-backdrop-filter: blur(20px) saturate(200%);
     padding: 25px;
     border-radius: 16px;
     box-shadow: 
         0 8px 32px rgba(0, 0, 0, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+        inset 0 1px 1px rgba(255, 255, 255, 0.4),
+        inset 0 -1px 1px rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.3);
     border-left: 5px solid var(--primary-dark);
     text-align: center;
@@ -865,11 +860,15 @@ body {
 }
 
 .stat-card:hover {
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(30px) saturate(200%);
+    -webkit-backdrop-filter: blur(30px) saturate(200%);
     transform: translateY(-4px);
     box-shadow: 
-        0 12px 40px rgba(0, 0, 0, 0.15),
-        inset 0 1px 0 rgba(255, 255, 255, 0.6);
-    background: rgba(255, 255, 255, 0.8);
+        0 12px 40px rgba(0, 0, 0, 0.2),
+        inset 0 1px 1px rgba(255, 255, 255, 0.5),
+        inset 0 -1px 1px rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.4);
 }
 
 .stat-card h3 {
@@ -977,14 +976,15 @@ textarea.form-control {
 .teacher-card,
 .coordinator-card,
 .grade-card {
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(20px) saturate(200%);
+    -webkit-backdrop-filter: blur(20px) saturate(200%);
     padding: 20px;
     border-radius: 16px;
     box-shadow: 
         0 8px 32px rgba(0, 0, 0, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+        inset 0 1px 1px rgba(255, 255, 255, 0.4),
+        inset 0 -1px 1px rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.3);
     border-left: 5px solid var(--primary-dark);
     display: flex;
@@ -997,11 +997,15 @@ textarea.form-control {
 .teacher-card:hover,
 .coordinator-card:hover,
 .grade-card:hover {
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(30px) saturate(200%);
+    -webkit-backdrop-filter: blur(30px) saturate(200%);
     transform: translateY(-2px);
     box-shadow: 
-        0 12px 40px rgba(0, 0, 0, 0.15),
-        inset 0 1px 0 rgba(255, 255, 255, 0.6);
-    background: rgba(255, 255, 255, 0.8);
+        0 12px 40px rgba(0, 0, 0, 0.2),
+        inset 0 1px 1px rgba(255, 255, 255, 0.5),
+        inset 0 -1px 1px rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.4);
 }
 
 .card-info h3 {
@@ -1374,13 +1378,13 @@ textarea.form-control {
         display: none;
         width: 100%;
         flex-direction: column;
-        background: rgba(65, 105, 225, 0.4);
-        backdrop-filter: blur(40px) saturate(180%);
-        -webkit-backdrop-filter: blur(40px) saturate(180%);
-        border-top: 1px solid rgba(255, 255, 255, 0.3);
+        background: rgba(30, 58, 138, 0.8);
+        backdrop-filter: blur(50px) saturate(200%);
+        -webkit-backdrop-filter: blur(50px) saturate(200%);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
         box-shadow: 
-            0 8px 32px rgba(65, 105, 225, 0.3),
-            inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            0 8px 32px rgba(0, 0, 0, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
     }
 
     .nav-menu.active {
@@ -1396,28 +1400,28 @@ textarea.form-control {
     }
 
     .nav-link:hover {
-        background: rgba(255, 255, 255, 0.25);
-        backdrop-filter: blur(20px) saturate(180%);
-        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(30px) saturate(200%);
+        -webkit-backdrop-filter: blur(30px) saturate(200%);
         transform: translateX(4px);
         box-shadow: 
-            0 4px 16px rgba(100, 149, 237, 0.3),
-            inset 0 1px 0 rgba(255, 255, 255, 0.5),
-            inset 0 -1px 0 rgba(255, 255, 255, 0.2);
-        border: 1px solid rgba(255, 255, 255, 0.35);
+            0 8px 32px rgba(0, 0, 0, 0.2),
+            inset 0 1px 1px rgba(255, 255, 255, 0.4),
+            inset 0 -1px 1px rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.3);
     }
 
     .nav-link.active {
-        background: rgba(255, 255, 255, 0.3);
-        backdrop-filter: blur(20px) saturate(180%);
-        -webkit-backdrop-filter: blur(20px) saturate(180%);
-        border-left: 3px solid rgba(255, 255, 255, 0.5);
+        background: rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(30px) saturate(200%);
+        -webkit-backdrop-filter: blur(30px) saturate(200%);
+        border-left: 3px solid rgba(255, 255, 255, 0.4);
         box-shadow: 
-            0 6px 20px rgba(100, 149, 237, 0.4),
-            inset 0 1px 0 rgba(255, 255, 255, 0.6),
-            inset 0 -1px 0 rgba(255, 255, 255, 0.25);
-        border: 1px solid rgba(255, 255, 255, 0.4);
-        border-left: 3px solid rgba(255, 255, 255, 0.5);
+            0 8px 32px rgba(0, 0, 0, 0.25),
+            inset 0 1px 1px rgba(255, 255, 255, 0.5),
+            inset 0 -1px 1px rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        border-left: 3px solid rgba(255, 255, 255, 0.4);
     }
 
     .nav-logo-img {
