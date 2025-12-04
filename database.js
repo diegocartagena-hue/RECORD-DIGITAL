@@ -8,13 +8,11 @@ let db = null;
 
 function initDb() {
   return new Promise((resolve, reject) => {
-    // Crear directorio si no existe
     const dbDir = path.dirname(dbPath);
     if (!fs.existsSync(dbDir)) {
       fs.mkdirSync(dbDir, { recursive: true });
     }
     
-    // Crear conexión
     db = new sqlite3.Database(dbPath, (err) => {
       if (err) {
         console.error('Error al abrir la base de datos:', err);
@@ -22,10 +20,8 @@ function initDb() {
         return;
       }
       
-      // Habilitar foreign keys
       db.run('PRAGMA foreign_keys = ON');
       
-      // Crear tablas
       db.serialize(() => {
         db.run(`
           CREATE TABLE IF NOT EXISTS users (
@@ -90,11 +86,9 @@ function initDb() {
             FOREIGN KEY (grade_id) REFERENCES grades(id)
           )
         `, () => {
-          // Agregar columna resolution_notes si no existe (para bases de datos existentes)
           db.run(`ALTER TABLE emergency_requests ADD COLUMN resolution_notes TEXT`, (err) => {
             // Ignorar error si la columna ya existe
           });
-          // Crear usuarios por defecto
           createDefaultUsers().then(() => {
             console.log('Base de datos inicializada correctamente');
             resolve();
@@ -107,7 +101,6 @@ function initDb() {
 
 function createDefaultUsers() {
   return new Promise((resolve, reject) => {
-    // Verificar si ya existen usuarios
     db.get('SELECT COUNT(*) as count FROM users', (err, row) => {
       if (err) {
         reject(err);
@@ -119,7 +112,6 @@ function createDefaultUsers() {
         return;
       }
       
-      // Crear administrador
       const adminPassword = bcrypt.hashSync('admin123', 10);
       db.run(`
         INSERT INTO users (username, email, password, role, full_name)
@@ -130,7 +122,6 @@ function createDefaultUsers() {
         }
       });
       
-      // Crear coordinador
       const coordPassword = bcrypt.hashSync('coord123', 10);
       db.run(`
         INSERT INTO users (username, email, password, role, full_name)
@@ -141,7 +132,6 @@ function createDefaultUsers() {
         }
       });
       
-      // Crear maestro
       const teacherPassword = bcrypt.hashSync('maestro123', 10);
       db.run(`
         INSERT INTO users (username, email, password, role, full_name)
@@ -164,7 +154,6 @@ function getDb() {
   return db;
 }
 
-// Funciones helper para hacer las consultas más fáciles
 function dbGet(query, params = []) {
   return new Promise((resolve, reject) => {
     db.get(query, params, (err, row) => {

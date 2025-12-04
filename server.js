@@ -28,10 +28,9 @@ app.use(session({
   secret: 'escuela-interamericana-secret-key-2024',
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 } // 24 horas
+  cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 }
 }));
 
-// Configurar multer para archivos
 const upload = multer({ dest: 'uploads/' });
 
 // Inicializar base de datos
@@ -41,7 +40,6 @@ initDb().catch(err => {
 });
 
 // ==================== RUTAS PÚBLICAS ====================
-
 app.get('/', (req, res) => {
   if (req.session.userId) {
     return res.sendFile(path.join(__dirname, 'templates', 'dashboard.html'));
@@ -52,7 +50,6 @@ app.get('/', (req, res) => {
 app.post('/api/login', async (req, res) => {
   try {
     const { email, password } = req.body;
-    
     const user = await verifyPassword(email, password);
     if (user) {
       req.session.userId = user.id;
@@ -95,7 +92,6 @@ app.get('/api/user/current', requireAuth, async (req, res) => {
 });
 
 // ==================== RUTAS DE MAESTRO ====================
-
 app.get('/api/grades', requireAuth, async (req, res) => {
   const year = req.query.year || new Date().getFullYear();
   try {
@@ -125,7 +121,6 @@ app.post('/api/annotations', requireAuth, async (req, res) => {
       VALUES (?, ?, ?, ?, ?)
     `, [student_id, user.id, annotation_type, points, description || '']);
     
-    // Notificar a coordinadores
     io.to('coordinators').emit('new_annotation', {
       annotation_id: result.lastID,
       teacher: user.full_name
@@ -155,17 +150,14 @@ app.get('/api/students/:studentId/annotations', requireAuth, async (req, res) =>
 app.put('/api/annotations/:annotationId', requireAuth, requireRole('admin'), async (req, res) => {
   try {
     const { annotation_type, points, description } = req.body;
-    
     if (!annotation_type || !points) {
       return res.status(400).json({ error: 'Se requieren annotation_type y points' });
     }
-    
     await dbRun(`
       UPDATE annotations 
       SET annotation_type = ?, points = ?, description = ?
       WHERE id = ?
     `, [annotation_type, points, description || '', req.params.annotationId]);
-    
     res.json({ success: true });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -214,17 +206,34 @@ app.get('/api/statistics/top-students', requireAuth, async (req, res) => {
   }
 });
 
+app.get('/api/statistics/dashboard', requireAuth, async (req, res) => {
+  try {
+    const totalAnnotations = await dbGet('SELECT COUNT(*) as count FROM annotations');
+    const studentsWithAnnotations = await dbGet(`
+      SELECT COUNT(DISTINCT student_id) as count FROM annotations
+    `);
+    const pendingEmergencies = await dbGet(`
+      SELECT COUNT(*) as count FROM emergency_requests WHERE status = 'pending'
+    `);
+    
+    res.json({
+      totalAnnotations: totalAnnotations?.count || 0,
+      studentsWithAnnotations: studentsWithAnnotations?.count || 0,
+      pendingEmergencies: pendingEmergencies?.count || 0
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.post('/api/emergency', requireAuth, async (req, res) => {
   try {
     const user = await getCurrentUser(req);
-    
     if (user.role !== 'teacher') {
       return res.status(403).json({ error: 'Solo maestros pueden crear emergencias' });
     }
     
     const { grade_id, message } = req.body;
-    
-    // Obtener información del grado
     const grade = await dbGet('SELECT grade_number, section FROM grades WHERE id = ?', [grade_id]);
     if (!grade) {
       return res.status(400).json({ error: 'Grado no encontrado' });
@@ -235,7 +244,6 @@ app.post('/api/emergency', requireAuth, async (req, res) => {
       VALUES (?, ?, ?, 'pending')
     `, [user.id, grade_id, message || 'Solicitud de asistencia urgente']);
     
-    // Notificar a coordinadores en tiempo real
     const emergencyData = {
       request_id: result.lastID,
       teacher: user.full_name,
@@ -246,13 +254,8 @@ app.post('/api/emergency', requireAuth, async (req, res) => {
       created_at: new Date().toISOString()
     };
     
-    console.log('Enviando alerta de emergencia a coordinadores y administradores:', emergencyData);
-    
-    // Notificar a coordinadores y administradores
     io.to('coordinators').emit('emergency_request', emergencyData);
     io.to('admins').emit('emergency_request', emergencyData);
-    
-    // También emitir a todos los sockets por si acaso (fallback)
     io.emit('emergency_request', emergencyData);
     
     res.json({ success: true, request_id: result.lastID });
@@ -262,7 +265,6 @@ app.post('/api/emergency', requireAuth, async (req, res) => {
 });
 
 // ==================== RUTAS DE COORDINADOR ====================
-
 app.get('/api/teachers', requireAuth, requireRole('coordinator', 'admin'), async (req, res) => {
   try {
     const teachers = await dbAll(`
@@ -329,7 +331,6 @@ app.get('/api/emergency/requests', requireAuth, requireRole('coordinator', 'admi
 app.post('/api/emergency/:requestId/status', requireAuth, requireRole('coordinator', 'admin'), async (req, res) => {
   try {
     const { status, resolution_notes } = req.body;
-    
     if (!['pending', 'in_progress', 'resolved'].includes(status)) {
       return res.status(400).json({ error: 'Estado inválido' });
     }
@@ -346,10 +347,8 @@ app.post('/api/emergency/:requestId/status', requireAuth, requireRole('coordinat
     }
     
     query += ` WHERE id = ?`;
-    
     await dbRun(query, params);
     
-    // Notificar al maestro sobre el cambio de estado
     const request = await dbGet(`
       SELECT er.*, u.full_name as teacher_name, g.grade_number, g.section
       FROM emergency_requests er
@@ -372,28 +371,7 @@ app.post('/api/emergency/:requestId/status', requireAuth, requireRole('coordinat
   }
 });
 
-app.post('/api/emergency/:requestId/resolve', requireAuth, requireRole('coordinator', 'admin'), async (req, res) => {
-  try {
-    const { resolution_notes } = req.body;
-    let query = `UPDATE emergency_requests SET status = 'resolved', resolved_at = datetime('now')`;
-    let params = [req.params.requestId];
-    
-    if (resolution_notes) {
-      query += `, resolution_notes = ?`;
-      params.unshift(resolution_notes);
-    }
-    
-    query += ` WHERE id = ?`;
-    
-    await dbRun(query, params);
-    res.json({ success: true });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
 // ==================== RUTAS DE ADMINISTRADOR ====================
-
 app.get('/api/coordinators', requireAuth, requireRole('admin'), async (req, res) => {
   try {
     const coordinators = await dbAll(`
@@ -438,10 +416,50 @@ app.post('/api/grades', requireAuth, requireRole('admin'), async (req, res) => {
   }
 });
 
+app.get('/api/grades/all', requireAuth, requireRole('admin'), async (req, res) => {
+  try {
+    const grades = await dbAll('SELECT * FROM grades ORDER BY year DESC, grade_number, section');
+    res.json(grades);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.delete('/api/grades/:gradeId', requireAuth, requireRole('admin'), async (req, res) => {
+  try {
+    await dbRun('DELETE FROM grades WHERE id = ?', [req.params.gradeId]);
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/students', requireAuth, requireRole('admin'), async (req, res) => {
+  try {
+    const gradeId = req.query.grade_id;
+    let query = `
+      SELECT s.*, g.grade_number, g.section, g.year
+      FROM students s
+      JOIN grades g ON s.grade_id = g.id
+    `;
+    const params = [];
+    
+    if (gradeId) {
+      query += ' WHERE s.grade_id = ?';
+      params.push(gradeId);
+    }
+    
+    query += ' ORDER BY g.grade_number, g.section, s.full_name';
+    const students = await dbAll(query, params);
+    res.json(students);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.post('/api/students', requireAuth, requireRole('admin'), async (req, res) => {
   try {
     const { student_id, full_name, grade_id } = req.body;
-    
     if (!student_id || !full_name || !grade_id) {
       return res.status(400).json({ error: 'Se requieren student_id, full_name y grade_id' });
     }
@@ -461,6 +479,15 @@ app.post('/api/students', requireAuth, requireRole('admin'), async (req, res) =>
   }
 });
 
+app.delete('/api/students/:studentId', requireAuth, requireRole('admin'), async (req, res) => {
+  try {
+    await dbRun('DELETE FROM students WHERE id = ?', [req.params.studentId]);
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.post('/api/students/import', requireAuth, requireRole('admin'), upload.single('file'), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'No se proporcionó archivo' });
@@ -475,7 +502,6 @@ app.post('/api/students/import', requireAuth, requireRole('admin'), upload.singl
     let data = [];
     const fileExt = path.extname(req.file.originalname).toLowerCase();
     
-    // Procesar CSV o Excel
     if (fileExt === '.csv') {
       const csvContent = fs.readFileSync(req.file.path, 'utf-8');
       const lines = csvContent.split('\n').filter(line => line.trim());
@@ -490,7 +516,6 @@ app.post('/api/students/import', requireAuth, requireRole('admin'), upload.singl
         data.push(row);
       }
     } else {
-      // Procesar Excel
       const workbook = XLSX.readFile(req.file.path);
       const sheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[sheetName];
@@ -501,7 +526,6 @@ app.post('/api/students/import', requireAuth, requireRole('admin'), upload.singl
     let errors = [];
     
     for (const row of data) {
-      // Buscar columnas con diferentes nombres posibles
       const studentId = row.student_id || row['student id'] || row.id || row['id estudiante'] || row['id_estudiante'];
       const fullName = row.full_name || row['full name'] || row.nombre || row.name || row['nombre completo'] || row['nombre_completo'];
       
@@ -516,9 +540,7 @@ app.post('/api/students/import', requireAuth, requireRole('admin'), upload.singl
       }
     }
     
-    // Eliminar archivo temporal
     fs.unlinkSync(req.file.path);
-    
     res.json({ success: true, imported, errors: errors.length > 0 ? errors : undefined });
   } catch (error) {
     if (req.file && fs.existsSync(req.file.path)) {
@@ -548,12 +570,10 @@ app.post('/api/database/new-year', requireAuth, requireRole('admin'), async (req
     const { year } = req.body;
     const newYear = year || new Date().getFullYear() + 1;
     
-    // Hacer backup
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
     const backupPath = `database/backup_${new Date().getFullYear()}_${timestamp}.db`;
     fs.copyFileSync('database/records.db', backupPath);
     
-    // Crear nuevos grados
     const oldGrades = await dbAll('SELECT grade_number, section FROM grades WHERE year = ?', [new Date().getFullYear()]);
     
     for (const grade of oldGrades) {
@@ -572,7 +592,6 @@ app.post('/api/database/new-year', requireAuth, requireRole('admin'), async (req
 });
 
 // ==================== WEBSOCKETS ====================
-
 io.on('connection', (socket) => {
   console.log('Cliente conectado:', socket.id);
   
@@ -613,4 +632,3 @@ server.listen(PORT, '127.0.0.1', () => {
   console.log('\n  Presiona Ctrl+C para detener el servidor\n');
   console.log('='.repeat(60) + '\n');
 });
-
