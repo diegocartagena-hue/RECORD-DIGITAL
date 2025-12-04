@@ -4,3 +4,5 @@ cmd /k DIAGNOSTICO.bat
 
 
 
+
+

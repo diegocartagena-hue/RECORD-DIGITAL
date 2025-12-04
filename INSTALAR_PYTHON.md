@@ -75,3 +75,5 @@ Si ambos comandos funcionan, Python está correctamente instalado.
 
 
 
+
+
