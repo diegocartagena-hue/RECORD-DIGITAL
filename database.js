@@ -86,9 +86,7 @@ function initDb() {
             FOREIGN KEY (grade_id) REFERENCES grades(id)
           )
         `, () => {
-          db.run(`ALTER TABLE emergency_requests ADD COLUMN resolution_notes TEXT`, (err) => {
-            // Ignorar error si la columna ya existe
-          });
+          db.run(`ALTER TABLE emergency_requests ADD COLUMN resolution_notes TEXT`, (err) => {});
           createDefaultUsers().then(() => {
             console.log('Base de datos inicializada correctamente');
             resolve();

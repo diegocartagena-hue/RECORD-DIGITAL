@@ -4,8 +4,7 @@
   "description": "Sistema de registro digital para Escuela Interamericana",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js"
+    "start": "node server.js"
   },
   "keywords": ["education", "record", "school"],
   "author": "Escuela Interamericana",
