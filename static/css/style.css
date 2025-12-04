@@ -76,6 +76,16 @@ body {
     margin-bottom: 30px;
 }
 
+.login-logo {
+    max-width: 150px;
+    width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .login-header h1 {
     color: var(--primary-dark);
     font-size: 28px;
