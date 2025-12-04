@@ -391,11 +391,6 @@ select.form-control option {
     padding: 12px 16px;
 }
 
-[data-theme="dark"] select.form-control option {
-    background-color: var(--card-bg);
-    color: var(--text-primary);
-}
-
 select.form-control option:checked {
     background-color: rgba(30, 58, 138, 0.8);
     color: #ffffff;
